@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">AndroidStudy</h1>
 
-[GitHub]https://github.com/AutumnCoral/AndroidStudy.git)
+[GitHub](https://github.com/AutumnCoral/AndroidStudy.git)
 [开始阅读](#AndroidStudy)
 
 
