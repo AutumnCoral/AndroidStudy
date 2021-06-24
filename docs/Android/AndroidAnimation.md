@@ -1,4 +1,4 @@
-# Android的动画
+# 动画
 
 [参考文章]https://www.jianshu.com/p/420629118c10
 

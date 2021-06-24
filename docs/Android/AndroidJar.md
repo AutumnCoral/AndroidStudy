@@ -1,48 +1,4 @@
-[TOC]
-
-如何做好看好资料，在看源码，在手写一遍就会？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？//
-
-# **基础入门**
-
-## 第1课 Android入门
-
-## 第2课 AS使用指南
-
-## 第3课 Android布局
-
-## 第4课 UI基础控件和高级控件
-
-### 基础控件
-
-### 高级控件
-
-# UI常用组件
-
-## 第1课 四大组件
-
-## 第2课 Android菜单创建和使用
-
-## 第3课 Android对话框处理
-
-## 第4课 Fragment创建及使用
-
-## 第5课  列表神器
-
-## 第6课 ViewPager实现导航效果
-
-# 网络操作与通信
-
-## 网络操作
-
-### 第1课  网络操作与通信
-
-### 第2课 Android通信
-
-### 第3课 AsyncTask异步任务
-
-### 第3课 Android通信
-
-# 流行框架
+# 常见的流行框架
 
 
 
@@ -116,7 +72,7 @@ Glide.with(this).load(url).into(imageView);
   ```
 
   - .diskCacheStrategy(DiskCacheStrategy.NONE):禁用掉Glide的缓存功能,让占位图显示出来
-  -  .error(R.drawable.error):指定异常占位符
+  - .error(R.drawable.error):指定异常占位符
 
   **指定图片格式**
 
@@ -506,83 +462,3 @@ private SupportRequestManagerFragment getSupportRequestManagerFragment(
 | -------------------------------------------------- | ----------------------- |
 | [LeakCanary](https://github.com/square/leakcanary) | 内存泄漏检测工具        |
 | [ACRA](https://github.com/ACRA/acra)               | Android应用程序崩溃报告 |
-
-## 第20课 百度地图
-
-## 第21课 高德地图
-
-## 第22课 JSON解析
-
-第23课  android-validate
-
- [android-validate](https://toscode.gitee.com/i-android/android-validate)
-
-# 数据存储
-
-## 第1课 Asndroid本地文件操作
-
-## 第2课 Android数据库操作
-
-## 第3课 BroadcastReceiver
-
-## 第4课 Application全局应用
-
-# Android高级开发
-
-## 第1课 自定义控件
-
-## 第2课 JNI/NDK
-
-## 第3课 Android与H5互调
-
-##  第4课 多渠道打包
-
-
-
-# Android架构模式详解
-
-## MVC/MVP/MVVM 
-
-1,在浏览器输入一个网址访问网站都是GET请求;再FORM表单中，可以通过设置Method指定提交方式为GET或者POST提交方式，默认为GET提交方式。
-
-2,get可以保存在浏览器书签，可以缓存，post不可以
-
-3，表现形式不同 ：
-
-GET请求，请求的数据会附加在URL之后，以?分割URL和传输数据，多个参数用&连接。URL的编码格式采用的是ASCII编码，而不是uniclde，即是说所有的非ASCII字符都要编码之后再传输。
-
-POST请求：POST请求会把请求的数据放置在HTTP请求包的包体中。
-
-4，传输数据的大小
-
-在HTTP规范中，没有对URL的长度和传输的数据大小进行限制。但是在实际开发过程中，对于GET，特定的浏览器和服务器对URL的长度有限制。因此，在使用GET请求时，传输数据会受到URL长度的限制。
-
-对于POST，由于不是URL传值，理论上是不会受限制的，但是实际上各个服务器会规定对POST提交数据大小进行限制，Apache、IIS都有各自的配置
-
-
-​	5，安全性
-
-POST的安全性比GET的高。
-
-关于参数
-
-考虑参数的位置：get请求的参数位于url中，而post请求的参数位于request body中。
-
-因此，,在浏览器输入一个网址访问网站都是GET请求，
-
-所以这导致了三个问题，
-一是get请求的安全性不如post请求；
-二是get的参数有长度限制，而post没有；
-三是因为RL的编码格式采用的是ASCII编码，get的参数只允许ASCII字符，post没有限制。
-
-关于回退
-点击回退或刷新时，post请求会再次提交表单，而get请求不会。
-所以post是回退有害的，get回退无害。
-
-关于缓存
-get能被缓存，可以收藏为书签，参数保留在浏览器历史中；
-post不能被缓存，不可收藏为书签，参数不会保留在浏览器历史中。
-
-关于请求包
-get请求只发送一个tcp数据包，即http header和data共同发送给web服务器，服务器响应200 OK.
-post请求发送两个tcp数据包，第一次发送http header，如果web服务器予以响应100 continue，则发送第二个数据包data，服务器响应200 OK.
