@@ -29,6 +29,8 @@
 
   [APk的混淆和反编译](H:\Note\AndroidStudy\docs\Project\APk的混淆和反编译.md)
 
+  [开发中遇到的Bug以及经验](H:\Note\AndroidStudy\docs\Project\Bug.md)
+
 * 计算机基础
 
   - [计算机网络](H:\Note\AndroidStudy\docs\computersBase\ComputersNet.md)
