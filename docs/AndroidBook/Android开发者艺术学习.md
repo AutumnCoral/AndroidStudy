@@ -1,6 +1,6 @@
 通过坚持学习，记录下每天的成长，希望可以成为想成为的人
 
-***202/12/16.第一天***
+***2020/12/16.第一天***
 
 # 第1章Activity的生命周期和启动模式以及IntentFilter的匹配规则。
 
@@ -270,11 +270,9 @@ android:configChanges="keyboardHidden|orientation|screenSize"
 > ```html
 > <application
 > 
-> 
-> 
->      android:taskAffinity="gf.zy"
+>   android:taskAffinity="gf.zy"
 > ```
->
+>    
 > 4.4.Application默认的affinity属性为Manifest的包名。
 
 ### 二：四种启动模式

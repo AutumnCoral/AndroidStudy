@@ -439,3 +439,196 @@ Activity的语法属性有很多，这里就不一一的介绍了，读者可以
 Activity 是一个负责与**用户交互**的组件，Activity 中所有操作都与用户密切相关，可以通过 setContentView(View)来**显示指定控件**。在一个 android 应用中，一个 Activity 通常就是一个单独的屏幕，它上面可以显示一些控件也可以监听并处理用户的事件做出响应。
 
 ### 2、请描述一下 Activity生命周期。
+
+[请参考Android开发者艺术第1章Activity的生命周期和启动模式以及IntentFilter的匹配规则。](./docs\AndroidBook\Android开发者艺术学习.md)
+
+#### 2.1  **Activity** **的** **4** **种状态**
+
+部分内容和图片参考网络，如有侵权，请联系删除2092963588@qq.com
+
+- **Active/Paused/Stopped/Killed**
+
+**Activie:**当前 Activity 正处于运行状态，指的是当前 Activity 获取了焦点。处于最前端，他可见并且可以与用户进行交互的激活状态
+
+**Paused：**当前 Activity 正处于暂停状态，指的是当前 Activity 失去焦点，此时的 Activity 并没有被销毁，内存里面的成员变量，状态信息等仍然存在，当然这个 Activity 也仍然可见，但是焦点却不在它身上，比如被一个对话框形式的 Activity 获取了焦点，或者被一个透明的 Activity 获取了焦点，这都能导致当前的 Activity 处于 paused 状态。
+
+**Stopped:**与 paused 状态相似，stopped 状态的 Activity 是完全不可见的，但是内存里面的成员变量，状态信息等仍然存在，但是也没有被销毁。
+
+**Killed:**已经被销毁的 Activity 才处于 killed 状态，它的内存里面的成员变量，状态信息等都会被一并回收。（即被系统杀死回收，或者没启动时）
+
+- **Activity 的生命周期分析正常情况下的生命周期**
+
+1.  Activity 启动–>onCreate()–>onStart()–>onResume()
+2. 点击 home 键回到桌面–>onPause()–>onStop()
+3. 再次回到原 Activity–>onRestart()–>onStart()–>onResume()
+4. 退出当前 Activity 时–>onPause()–>onStop()–>onDestroy()
+
+详细生命周期如下：
+
+
+
+|      |                                                              |
+| ---- | ------------------------------------------------------------ |
+|      | <img src="../media/pictures/Android第一行代码（第2版）.assets/Activity的生命周期.png" alt="Activity的生命周期" style="zoom:67%;" /> |
+
+ 
+
+
+
+\1. 启动了一个 Activity,通常是 Intent 来完成。启动一个 Activity 首先要执行的回调函数是onCreate(),通常在代码中你需要在此函数中绑定布局，绑定控件，初始化数据等做一些初始化的工作。
+
+\2. 即将执行 Activity 的 onStart()函数，执行之后 Activity 已经可见，但是还没有出现在前台，无法与用户进行交互。这个时候通常 Activity 已经在后台准备好了，但是就差执行onResume()函数出现在前台。
+
+\3. 即将执行 Activity 的 onResume()函数，执行之后 Activity 不止可见而且还会出现在前台，可以与用户进行交互啦。
+
+\4. 由于 Activity 执行了 onResume()函数，所以 Activity 出现在了前台。也就是 Activity
+
+处于运行状态。
+
+\5. 处于运行状态的 Activity 即将执行 onPause()函数，什么情况下促使 Activity 执行onPause()方法呢？
+
+[1] 启动了一个新的 Activity [2]返回上一个 Activity
+
+可以理解为当需要其他 Activity，当前的 Activity 必须先把手头的工作暂停下来，再来把当前的界面空间交给下一个需要界面的 Activity，而 onPause()方法可以看作是一个转接工作的过程，因为屏幕空间只有那么一个，每次只允许一个 Activity 出现在前台进行工 作。通常情况下 onPause()函数不会被单独执行，执行完 onPause()方法后会继续执行onStop()方法，执行完 onStop()方法才真正意味着当前的 Activity 已经退出前台，存在于后台。
+
+\6. Activity 即将执行 onStop()函数，在“5”中已经说得很清楚了，当 Activity 要从前台切换至后台的时候会执行，比如：用户点击了返回键，或者用户切换至其他 Activity 等。
+
+\7. 当前的 Activity 即将执行 onDestory()函数，代表着这个 Activity 即将进入生命的终结点，这是 Activity 生命周期中的最后一次回调生命周期，我们可以在 onDestory()函数中，进行一些回收工作和资源的释放工作，比如：广播接收器的注销工作等。
+
+\8. 执行完 onDestory()方法的 Activity 接下来面对的是被 GC 回收，宣告生命终结。
+
+\9. 很少情况下 Activity 才走“9”，网上一些关于对话框弹出后 Activity 会走“9”的说法，经过笔者验证，在某个 Activity 内弹出对话框并没有走“9”，所以网上大部分这样说法的文章要么是没验证，要么直接转载的，这个例子说明，实验出真知，好了，不废话了，那么什么情况下，Activity 会走“9”呢？
+
+\10. 当用户在其他的 Activity 或者桌面回切到这个 Activity 时，这个 Activity 就会先去执行onRestart()函数，Restart 有“重新开始”的意思，然后接下来执行 onStart()函数，接着执行 onResume()函数进入到运行状态。
+
+\11. 在“10”中讲的很清楚了。
+
+\12. 高优先级的应用急需要内存，此时处于低优先级的此应用就会被 kill 掉。
+
+\13. 用户返回原 Activity。
+
+ ***\*下面来着重说明一下 Activity 每个生命周期函数：\****
+
+**onCreate():**
+
+表示 Activity 正在被创建，这是 Activity 生命周期的第一个方法。通常我们程序员要在此函数中做初始化的工作，比如：绑定布局，控件，初始化数据等。
+
+**onStart():**
+
+表示 Activity 正在被启动，这时候的 Activity 已经被创建好了，完全过了准备阶段，但是没有出现在前台，需要执行 onResume()函数才可以进入到前台与用户进行交互。
+
+**onResume():**
+
+表示 Activitiy 已经可见了，并且 Activity 处于运行状态，也就是 Activity 不止出现在了前台，而且还可以让用户点击，滑动等等操作与它进行交互。
+
+**onPause():**
+
+表示 Activity 正在暂停，大多数情况下，Activity 执行完 onPause()函数后会继续执行onStop()函数，造成这种函数调用的原因是当前的 Activity 启动了另外一个 Activity 或者回切到上一个 Activity。还有一种情况就是 onPause()函数被单独执行了，并没有附带执行 onStop()方法，造成这种函数调用的原因很简单，就是当前 Activity 里启动了类似于对话框的东东。
+
+**onStop():**
+
+表示 Activity 即将停止，我们程序员应该在此函数中做一些不那么耗时的轻量级回收操作。
+
+**onestart():**
+
+表示 Activity 正在重新启动。一般情况下，一个存在于后台不可见的 Activity 变为可见状态，都会去执行 onRestart()函数，然后会继续执行 onStart()函数，onResume()函数出现在前台并且处于运行状态。
+
+**onDestory():**
+
+表示 Activity 要被销毁了。这是 Activity 生命中的最后一个阶段，我们可以在onDestory()函数中做一些回收工作和资源释放等，比如：广播接收器的注销等。
+
+#### 2.2 异常情况下的生命周期
+
+**情况 1：资源相关的系统配置发生改变导致 Activity 被杀死并重新创建。**
+
+![异常情况下的生命周期1](../media/pictures/Android第一行代码（第2版）.assets/异常情况下的生命周期1.png)
+
+​      可以从图中看出当 Activity 发生意外的情况的时候，这里的意外指的就是系统配置发生改变，Activity 会被销毁，其 onPause,OnStop,onDestory 函数均会被调用，同时由于Actiivty 是在异常情况下终止的，系统会调用 onSaveInstanceState 来保存当前 Activity 状态。调用 onSaveInstanceState 的时机总会发生在 onStop 之前，至于会不会调用时机发生在 onPause 方法之前，那就说不定了，这个没有固定的顺序可言，正常情况下一般onSaveInstanceState 不会被调用。当 Activity 被重新创建后，系统会调用onRestoreInstanceState,并且把 Actiivty 销毁时 onSaveInstanceState 方法所保存的Bundle 对象作为参数传递给 onRestoreInstanceState 和 onCreate 方法。所以我们可以通过 onRestoreInstanceState 和 onCreate 方法来判断 Actiivty 是否被重建了，如果被重建了，那么我们就可以取出之前保存的数据并恢复，从时序上来看， onRestoreInstanceState 的调用时机发生在 onStart 之后。
+
+1，onSaveInstanceState 
+
+在activity可能被回收之前调用,用来保存自己的状态和信息，以便回收后重建时恢复数据（在onCreate()或onRestoreInstanceState()中恢复）。旋转屏幕重建activity会调用该方法，但其他情况在onRause()和onStop()状态的activity不一定会调用
+
+2，onRestoreInstanceState方法
+
+　　这个方法在onStart 和 onPostCreate之间调用，在onCreate中也可以状态恢复，但有时候需要所有布局初始化完成后再恢复状态。
+
+**情况 2：资源内存不足导致低优先级的 Activity 被杀死。**
+
+#### 2.3特殊情况下的生命周期
+
+在清单文件Activity节点下可以添加android:configChanges属性，指定属性发生改变时，调用Activity 的onConfigurationChanged()方法,不会创建新的Activity，设置方法：将下列字段用“|”符号分隔开，例如："keyboardHidden|orientation|screenSize"
+
+与横竖屏生命周期函数有关调用的属性是"android:configChanges",关于它的属性值设置影响如下：
+
+l orientation：消除横竖屏的影响
+
+l keyboardHidden：消除键盘的影响
+
+l screenSize：消除屏幕大小的影响
+
+当我们设置 Activity 的 android:configChanges 属性为 orientation 或者orientation|keyboardHidden 或者不设置这个属性的时候，它的生命周期会走如下流程：
+
+ 
+
+| 1.	刚刚启动 Activity 的时候：                             |
+| ------------------------------------------------------------ |
+| 2.	onCreate                                               |
+| 3.	onStart                                                |
+| 4.	onResume                                               |
+| 5.	由竖屏切换到横屏：                                     |
+| 6.	onPause                                                |
+| 7.	onSaveInstanceState //这里可以用来横竖屏切换的保存数据 |
+| 8.	onStop                                                 |
+| 9.	onDestroy                                              |
+| 10.	onCreate                                              |
+| 11.	onStart                                               |
+| 12.	onRestoreInstanceState//这里可以用来横竖屏切换的恢复数据 |
+| 13.	onResume                                              |
+| 14.	横屏切换到竖屏：                                      |
+| 15.	onPause                                               |
+| 16.	onSaveInstanceState                                   |
+| 17.	onStop                                                |
+| 18.	onDestroy                                             |
+| 19.	onCreate                                              |
+| 20.	onStart                                               |
+| 21.	onRestoreInstanceState                                |
+| 22.	onResume                                              |
+
+当我们设置 Activity 的 android:configChanges 属性为 orientation|screenSize 或者orientation|screenSize|keyboardHidden
+
+| 1. 刚刚启动 Activity 的时候： |
+| ----------------------------- |
+| 2. onCreate                   |
+| 3. onStart                    |
+| 4. onResume                   |
+| 5. 由竖屏切换到横屏：         |
+| 6.                            |
+| 7. 什么也没有调用             |
+| 8. 横屏切换到竖屏：           |
+| 9. 什么也没有调用             |
+
+#### 2.4 Activity上有Dialog的时候按Home键时的生命周期是
+
+onCreate() -> onStart() -> onResume -> onPause() -> onStop() 
+
+我们弹出的Dialog实际上是一个布满全屏的Activity组件,，因而我们队Activity并不是不可见而是被一个布满屏幕的组件覆盖了其他组件。当我们按Home键时，Activity会执行正常的onPause() -> onStop()操作，使Activity真正进入后台。
+
+#### 2.5 两个Activity 之间跳转时必然会执行的是哪几个方法
+
+首先定义两个Activity，分别为A和B。
+
+当我们在A中激活B时，A调用onPause()方法，此时B出现在屏幕时，B调用onCreate()、onStart()、onResume()。这个时候B【B不是一个透明的窗体或对话框的形式】已经覆盖了A的窗体，A会调用onStop()方法。
+
+#### 2。6前台切换到后台，然后再回到前台，Activity生命周期回调方法。弹出Dialog，生命值周期回调方法
+
+首先定义两个Activity，分别为A和B。
+
+完整顺序为：A调用onCreate()方法 ---> onStart()方法 ---> onResume()方法。当A启动B时，A调用onPause()方法，然后调用新的Activity B，此时调用onCreate()方法 ---> onStart()方法 ---> onResume()方法将新Activity激活。之后A再调用onStop()方法。当A再次回到前台时，B调用onPause()方法，A调用onRestart()方法 ---> onStart()方法 ---> onResume()方法，最后调用B的onStop()方法 ---> onDestory()方法。弹出Dialog时，调用onCreate()方法 ---> onStart()方法 ---> onResume()方法。
+
+### 3，请描述一下Activity的四种启动模式
+
+- standard：是每次打开一个activity就会创建一个activity的实例出来，比如你从首页打开一个子页面，点一次就会创建一次，按返回键的时候就要回退很多次
+- singleTop：在启动活动时，如果发现该返回栈的栈顶已经是该活动时，则认为可以直接使用它，不会在创建新的活动实例，只会保证每次同时只打开一个activity，比如你从首页打开一个子页面，点击打开的时候，系统首先会检查这个子页面有没有被打开，如果已经是打开的则不会再次打开直接展示那一个页面，按返回键的时候点击一次就行就可以回退到主页面
+- singleTask:每次启动该活动时，首先会在返回栈中检查是否存在该活动的实例，如果发现已经存在就直接使用该实例，并把这个活动之上的所有活动统统出栈，如果没有发现就会创建一个新的活动实例,如：在 SecondActivity 中启动 FirstActivity 时，会发现返回栈中已经存在一个 FirstActivity 的实例，并且是在 SecondActivity 的下面，于是 SecondActivity 会从返回栈中出栈，而 FirstActivity 重新成为了栈顶活动
+- singleInstance：指定为singleInstance模式的活动会启用一个新的返回栈来管理这个活动，不管是哪个应用程序来访问这个活动，都共用的同一个返回栈，解决了共享活动实例的问题，

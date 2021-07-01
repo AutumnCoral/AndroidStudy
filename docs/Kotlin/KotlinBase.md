@@ -2,9 +2,11 @@
 
 
 
-[kotlin官方中文文档](http://www.kotlincn.net/docs/reference/coroutines/coroutines-guide.html)
+参考1：[kotlin官方中文文档](http://www.kotlincn.net/docs/reference/coroutines/coroutines-guide.html)
 
+参考2：第一行代码第三版
 
+参考3：[菜鸟教程](https://www.runoob.com/kotlin/kotlin-tutorial.html)
 
 # Kotlin Android 环境搭建
 
@@ -96,15 +98,18 @@ fun main() {
 
 #### 标准函数
 
-let,with,runmapply,repeat
+任何Kotlin代码都可以自由地调用所有的标准函数。
+
+**let,with,runmapply,repeat**
+
+- let:主要作用就是配合?.操作符来进行辅助判空处理
+- with
 
 #### 静态函数
 
 companion  object ，@JvmStatic
 
-
-
-# 数据类型
+## 数据类型
 
 查看1.2.1变量
 
@@ -759,4 +764,6 @@ fun study(Study study?){
 | Ⅹ    | 0.8-0.99                   | 0.6-0.88     | 0.6-0.9           | 0.52-0.71       | 0.4-0.8           |
 | Ⅺ    | 0.91-0.99                  | 08-0.99      | 0.9-0.99          | 07-0.99         | 07-0.99           |
 | Ⅻ    | 1                          | 1            | 1                 | 1               | 1                 |
+
+ 
 
