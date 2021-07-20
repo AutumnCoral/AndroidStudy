@@ -93,6 +93,48 @@ String 中的对象是不可变的，也就可以理解为常量，线程安全�
      2. 单线程操作字符串缓冲区下操作大量数据: 适用 StringBuilder
      3. 多线程操作字符串缓冲区下操作大量数据: 适用 StringBuffer
 
+## Final
+
+final可以用来修饰变量（包括类属性、对象属性、局部变量和形参）、方法（包括类方法和对象方法）和类。
+
+### finial修饰变量
+
+- **final成员变量**
+
+Java语法规定：**final修饰的成员变量必须由程序员显式地指定初始值（成员变量的初始值可以在定义该变量时指定默认值，也可以在初始化块、构造器中指定初始值。注意，只能在其中一个地方进行初始化）**
+
+```
+//构造器中初始化	
+public final int title ;
+public final int desc;
+public final Class<? extends Activity> demoClass;
+
+public CommonInfo(int title, int desc,
+                Class<? extends Activity> demoClass) {
+    this.title = title;
+    this.desc = desc;
+    this.demoClass = demoClass;
+}
+```
+
+final成员变量在显式初始化之前不能直接访问，但可以通过方法来访问，这基本上可断定是Java设计的一个缺陷。按照正常逻辑，final成员变量在显式初始化之前是不应该允许被访问的。因此，建议开发者尽量避免在final成员变量显式初始化之前访问它。
+
+- **final局部变量**
+
+  系统不会对局部变量进行初始化，局部变量必须由程序员显式初始化。因此使用final修饰局部变量时，既可以在定义时指定默认值，也可以不指定默认值。
+
+  如果final修饰的局部变量在定义时没有指定默认值，则可以在后面代码中对该final变量赋初始值，但只能一次，不能重复赋值；如果final修饰的局部变量在定义时已经指定默认值，则后面代码中不能再对该变量赋值。
+
+  [参考](https://www.cnblogs.com/lwbqqyumidi/p/3513047.html)
+
+  -  **final修饰基本类型变量和引用类型变量的区别**
+
+     **final修饰基本类型变量的值不可以字啊改变，但是修饰的引用型变量的内容可以被改变，但是当改变以后，不能在重新赋值，不然会报错
+
+### final方法
+
+final修饰的方法不可被重写，如果出于某些原因，不希望子类重写父类的某个方法，则可以使用final修饰该方法。
+
 # java面向对象
 
 ## 1，java面向对象

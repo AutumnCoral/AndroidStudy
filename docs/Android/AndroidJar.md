@@ -462,3 +462,10 @@ private SupportRequestManagerFragment getSupportRequestManagerFragment(
 | -------------------------------------------------- | ----------------------- |
 | [LeakCanary](https://github.com/square/leakcanary) | 内存泄漏检测工具        |
 | [ACRA](https://github.com/ACRA/acra)               | Android应用程序崩溃报告 |
+
+## 第18课 日志监控
+
+| 名称      | 描述                                                         |
+| --------- | ------------------------------------------------------------ |
+| 腾讯bugly | Bugly 能帮助移动互联网开发者更及时地发现掌控异常，更全面的了解定位异常，更高效的修复解决异常 |
+
