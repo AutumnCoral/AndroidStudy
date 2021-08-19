@@ -26,7 +26,7 @@ API控制台的地址为：http://lbsyun.baidu.com/apiconsole/key
 
 1,生成项目得签名
 
-<img src="../media/pictures/Map.assets/image-20210719153337152.png" alt="image-20210719153337152" style="zoom:33%;" />
+<img src="../media/pictures/Map.assets/image-20210719153337152.png" alt="image-20210719153337152" style="zoom:33%;" />chenhao
 
 2.生成以后在签名文件jks在的目录下打开cmd,在控制面板输入keytool -list -v -keystore debug.keystore；
 
@@ -238,6 +238,8 @@ sourceSets {
 
 ## Arcgis for Android 
 
+官网：https://developers.arcgis.com/android/ui-components/
+
 ### 地图
 
 - 显示一个 底图图层 例如街道或卫星图像。
@@ -258,7 +260,7 @@ sourceSets {
 - 处理非空间数据和表格。
 - 使用户能够在现场收集和编辑数据，并与您的企业级地理数据库同步编辑。
 
-### 官网：https://developers.arcgis.com/android/ui-components/
+
 
 *XMind - Evaluation Version*
 
