@@ -1,5 +1,9 @@
 # **java基础**
 
+**学习书籍：java核心1技术 卷I ,卷II**
+
+**视频：黑马**
+
 ## 第1课java基础语法
 
 javac：用来编译java文件，将.java文件编译成虚拟机可以识别的字节码文件.class文件,
@@ -199,7 +203,37 @@ public boolean equals(Object anObject) {
 
 #### 数组拷贝
 
-去，就要使用Arrays类的copyOf方法
+在Java中，允许将一个数组变量拷贝给另一个数组变量。这时，两个变量将引用同一个数组，就要使用Arrays类的copyOf方法
+
+####  打印数组中的所有元素
+
+**forEach**
+
+依次处理数组中的元素，而不必指定下标值
+
+**Arrays.toString**
+
+作用：返回一个包含数组元素的字符串，这些元素被放在括号内，并用逗号分开
+
+```
+int[] a = {2, 5, 4, 6, 7};
+for (int forEach:a){
+   System.out.println("forEach=" + forEach);//打印数组a中的每一个元素，一个元素占一行，注意int可以为任何类型，也可以为对象
+   System.out.println("b=" + Arrays.toString(b));//输出结果：a=[2, 4, 5, 6, 7]
+}
+输出结果
+forEach=2
+forEach=4
+forEach=5
+forEach=6
+forEach=7
+```
+
+**注意：**数组的长度可以为0
+
+#### 数组排序
+
+Arrays类中的sort方法
 
 ## 第4课，对象和类
 
@@ -300,6 +334,8 @@ System.out.println("p=:" +p);
 
 #### static
 
+https://baijiahao.baidu.com/s?id=1636927461989417537&wfr=spider&for=pc
+
 ##### 定义：
 
 用于修饰成员（成员变量，成员函数），静态修饰内容被共享（有共同属性的时候可以用static）
@@ -352,13 +388,13 @@ System.out.println("country=:" + PersonBean.country);
 
    -  主函数的定义：public:代表着改函数的访问权限最大
 
-   ​                                 static:随着类的加载已经存在了
+   ​                            static:随着类的加载已经存在了
 
-   ​                                 void:没有返回值
+   ​                             void:没有返回值
 
-   ​                                 main:不是关键字
+   ​                             main:不是关键字
 
-   ​                                 String[] args：函数的参数，参数类型是一个数组，该数组中的元素是字符串，字符串类型的数组
+   ​                             String[] args：函数的参数，参数类型是一个数组，该数组中的元素是字符串，字符串类型的数组
 
    - 主函数是固定格式的（只有 args可以修改（这是变量名） ）：jvm识别 ，注意jvm在调用主函数的时候，传入的是new String[0];   
 
@@ -389,4 +425,71 @@ System.out.println("country=:" + PersonBean.country);
 命令：使用命令输入javadoc -d javaapi -header 测试的API -doctitle 这是我的第一个文档注释 -version -author javadoc/Hello.java 进行文档生成。-d:文件存储位置; -head:文件头部名称; -version:显示版本; -author:显示作者; javadoc/Hello.java 处理的文件包以及java源文件.
 
 **比如javac -d myHelp -author  -version  ArrarTool.java**
+
+##### 静态代码块
+
+**格式：**
+
+```
+public class StaticDemo3 {
+   static {
+      System.out.println("a");
+   }
+   public static void main(String[] args) {
+      System.out.println("b");
+   }
+}
+```
+
+**特点：**
+
+随着类的加载而只是执行一次,用于给类进行初始化,并优于主函数
+
+#### 对象的初始化过程
+
+[参考](https://blog.csdn.net/justloveyou_/article/details/72466416)
+
+Study s = new Study("学习对象初始化"，23);
+
+**注释**
+
+这句代码干了什么？
+
+1，因为new用到了Study.class这个对象，所以会先找到Study.class这个对象并加载到内存中
+
+2，执行该代码中的static代码块，如果有的话，给Study.class进行初始化
+
+3，在堆内存中开辟内存空间分配内存地址
+
+4, 在堆内存中建立对象的特有属性，并默认初始化	
+
+5，对属性显示初始化
+
+6，对对象进行构造代码块初始化
+
+7，对对象进行对应构造函数初始化
+
+8，将内存地址赋值给栈内存中的s变量
+
+#### 实例模式
+
+##### 单实例模式
+
+解决一个类在内存中只存在一个对象
+
+### 面向对象的特点
+
+#### 继承
+
+##### 继承的概述
+
+##### 继承的特点
+
+##### super关键字
+
+##### 函数覆盖
+
+##### 子类的实例化过程
+
+##### final关键字
 
