@@ -44,4 +44,15 @@ post不能被缓存，不可收藏为书签，参数不会保留在浏览器历�
 
 关于请求包
 get请求只发送一个tcp数据包，即http header和data共同发送给web服务器，服务器响应200 OK.
-post请求发送两个tcp数据包，第一次发送http header，如果web服务器予以响应100 continue，则发送第二个数据包data，服务器响应200 OK.
+post请求发送两个tcp数据包，第一次发送http header，如果web服务器予以响应100 continue，则发送第二个数据包data，服务器响应200 OK.,
+
+##  新架构：Jetpack
+
+Jetpack组件主要分为四大类：基础组件（Foundation Components）、架构组件（Architecture Components）、行为组件（Behavior Components）和界面组件（UI Components
+
+组件（UI Components）。具体包括的库分别如下：
+
+- · 基础组件：包括AppCompat、Android KTX、Multidex和Test；
+- · 架构组件：包括Data Binding、Lifecycles、LiveData、Navigation、Paging、Room、ViewModel和WorkManager；·
+-  行为组件：包括Download Manager、Media&Playback、Permissions、Notifications、Sharing和Slices；· 
+- 界面组件：包括Animation&Transitions、Auto, TV&Wear、Emoji、Fragment、Layout和Palette。
