@@ -55,131 +55,6 @@ javec:编译成.class文件，class文件会解析成机器码会放到jvm（有
 
 ### 包机制
 
-### 字符串
-
-#### **字符串的常见方法**
-
-##### 字符串的其他方法1**
-
--  codePointAt:返回从给定位置开始的码点。
-- offsetByCodePoints:返回从startIndex代码点开始，位移cpCount后的码点索引。
-- compareTo:按照字典顺序，如果字符串位于other之前，返回一个负数；如果字符串位于other之后，返回一个正数；如果两个字符串相等，返回0。startsWith,endsWith:如果字符串以suffix开头或结尾，则返回true。
-- int index0f(String str)：返回与字符串str匹配的第一个子串的开始位置，从0开始计算
-- int index0f(String str, int fromIndex),返回与字符串str匹配的第一个子串的开始位置，从fromIndex开始计算
-- int index0f(int cp),int index0f(int cp, int fromIndex):
-
- 返回与字符串str或代码点cp匹配的第一个子串的开始位置。这个位置从索引0或fromIndex开始计算。如果在原始串中不存在str，返回-1
-
-- ```
-  String a = "Hello";
-  System.out.println("charAt:" + a.charAt(2)); //输出：1
-  System.out.println("codePointAt:" + a.codePointAt(2)); //输出：108
-  System.out.println("offsetByCodePoints:" + a.offsetByCodePoints(2, 1));//输出：3
-  System.out.println("compareTo:" + a.compareTo("e"));//输出：-29
-  System.out.println("startsWith:" + a.startsWith("H"));//输出true
-  System.out.println("endsWith:" + a.endsWith("H"));//输出false
-  System.out.println("index0f(String str):" + a.indexOf("H"));//输出0 返回H所在的下标，从0开始计算
-  System.out.println("index0f(String str, int fromIndex)" + a.indexOf("e", 2));//输出-1 返回e所在的第一个子串的开始位置从2开始计算
-  System.out.println("index0f(int cp):" + a.indexOf(3));//
-  System.out.println("index0f(int cp, int fromIndex):" + a.indexOf(1,2));//
-  ```
-
-##### 字符串其他方法2
-
--    equals:判断字符串相等， 不能用==来进行判断是否相等，==只会来判断是否在同一位置上
-
- * length:返回字符串的长度。
-
- * codePointCount:返回startIndex和endIndex-1之间的代码点数量。没有配成对的代用字符将计入代码点
-
- * replace:返回一个新字符串。这个字符串用newString代替原始字符串中所有的oldString
-
- * substring(int beginIndex):返回下标从beginIndex开始的值，包含该下标
-
- * substring(int beginIndex, int endIndex)：返回从返回下标从（beginIndex,endIndex]开始的值
-
- * 注意：substring的工作方式有一个优点：容易计算子串的长度。字符串s.substring（a，b）的长度为b-a。例如，子串“Hel”的长度为3-0=3。
-
- * toLowerCase:全部转换为小写
-
- * toUpperCase：全部转换为大写
-
- * trim:返回一个新字符串。这个字符串将删除了原始字符串头部和尾部的空格
-
- ```
- String a = "Hello";
- String b = "Hell";
- if (a.equals(b)) {
-    System.out.println("true");
- } else {
-    System.out.println("false");
- }
- System.out.println("length:" + a.length());//返回5
- System.out.println("codePointCount:" + a.codePointCount(1,4));//Hello:返回3
- System.out.println("replace:" + a.replace("e","E"));//Hello:返回HEllo
- System.out.println("substring(int beginIndex):" + a.substring(1));//Hello:返回ello
- System.out.println("substring(int beginIndex, int endIndex):" + a.substring(1,2));//Hello:返回e
- System.out.println("toLowerCase():" + a.toLowerCase());//Hello:hello
- System.out.println("toUpperCase():" + a.toUpperCase());//Hello:HELLO
- System.out.println("trim():" + a.trim());//Hello
- ```
-
-#### 字符串的拼接：+
-
-当一个非字符串拼接一个字符串的时候，后者会被转换为字符串，因此在开发中可以通过拼接来转换字符串。
-
-#### 不可变字符串**
-
-String类没有提供用于修改字符串的方法
-
-注意：String的不可变原因：
-
-查看源码可以看出
-
-String类被final进行修饰，因此不可修改，String的成员变量也是用final进行修饰了
-
-<img src="../media/pictures/JavaBase.assets/image-20210816103020189.png" alt="image-20210816103020189" style="zoom:33%;" />
-
-
-
-
-
-##### 字符串的判空
-
-​    字符串有空串（长度为0的字符串）和null
-
-#### 面试题2**==和equals的区别**
-
-==：对比的是**栈**中的值，基本数据类型是变量值，引用数据类型是堆中内存对象的地址
-
-equals：Object中默认也是采用==来进行比较，通常会重写
-
-String
-
-```
-public boolean equals(Object anObject) {
-    if (this == anObject) {
-        return true;
-    }
-    if (anObject instanceof String) {
-        String anotherString = (String)anObject;
-        int n = length();
-        if (n == anotherString.length()) {
-            int i = 0;
-            while (n-- != 0) {
-                if (charAt(i) != anotherString.charAt(i))
-                        return false;
-                i++;
-            }
-            return true;
-        }
-    }
-    return false;
-}
-```
-
-面试3**String，StringBuilder，StringBuffer的区别**
-
 
 
 ## 第2课 Java流程控制
@@ -579,7 +454,38 @@ super()：会访问父类中***\*空参\****的构造函数，***\*而且子类�
 
 ##### 函数覆盖
 
+关键字this有两个用途：一是引用隐式参数，二是调用该类其他的构造器。同样，super关键字也有两个用途：一是调用超类的方法，二是调用超类的构造器。在调用构造器的时候，这两个关键字的使用方式很相似。调用构造器的语句只能作为另一个构造器的第一条语句出现。构造参数既可以传递给本类（this）的其他构造器，也可以传递给超类（super）的构造器。
+
 ##### 子类的实例化过程
+
+```
+abstract class Emploee {
+   private String name;
+   private String id;
+   private double pay;
+   public Emploee(String name, String id, double pay) {
+      this.name = name;
+      this.id = id;
+      this.pay = pay;
+   }
+   public abstract void work();
+}
+```
+
+```
+class Manger extends Emploee {
+   private int bonus;
+   /*
+     1,子类继承父类以后要进行构造函数
+     2,在一个构造器中调用另一个重载的构造器使用this调用来完成，在子类构造器中调用父类构造器使用super调用来完成。
+     2,由于Maneger类的构造器，你们不能访问Emploee的私有属性，因此必须利用Emploee的构造器来进行初始化，可通过super来实现对父类构造器的调用，反射是指在程序运行期间发现更多的类及其属性的能力
+     如果子类的构造器没有显式地调用超类的构造器，则将自动地调用超类默认（没有参数）的构造器。如果超类没有不带参数的构造器，并且在子类的构造器中又没有显式地调用超类的其他构造器，则Java编译器将报告错误
+    */
+   public Manger(String name, String id, double pay, int bonus) {
+      super(name, id, pay);
+      this.bonus = bonus;
+   }
+```
 
 ##### final关键字
 
@@ -697,3 +603,117 @@ class SubTime extends GetTime {
 * 接口降低了耦合性
 * 接口与接口之间是实现关系，而且类可以继承一个类的同时实现多个接口
 * 接口有接口之间可以有继承关系，并且存在多继承关系（类与类之间的关系是单继承）
+
+#### 多态
+
+1, 多态的体现
+
+* 父类的应用指向自己子类对象,父类的引用也可以接收自己子类的对象
+
+2，多态的前提、
+
+* 必须是类与类直接有关系，要木继承，要目实现
+* 通常还有一个前提，存在覆盖
+
+3，多态的好处
+
+* 多态的出现大大的提高了程序的扩展性
+
+4，多态的应用
+
+5，多态的弊性：提高了扩展性，但是只能父类的引用访问父类中的成员
+
+6，对态
+
+### Object
+
+
+
+### 内部类
+
+内部类的访问规则
+
+ * 1，内部类可以直接访问外部类的成员，包含私有，之所以可以直接访问，因为内部类中持有了一个外部类的引用，格式，外部类.this
+ * 2外部类不能直接访问内部类，必须建立内部类
+ * 访问格式：
+ * 1,当内部类定义在外部类的成员位置上，而且非私有，可以在外部其他类中，可以直接建立内部类对象，
+ * 格式：外部类.内部类 变量名 = 外部类对象。内部类对象
+ * Outer.Inner in = new Outer.new Inner();
+ * 2 当内部类在成员位置上，就可以被成员修饰符所修饰。
+ * 比如：private：将内部类在外部类中进行封装
+ * static:内部类就具有static的特性
+ * 当内部类被static静态修饰后只能直接访问外部类中的静态成员了
+ * 在外部其他类中如何直接访问静态内部类啦
+ * new Outer.Inner1.function();
+ * 在外部其他类中，如何直接访问static内部类的静态成员成员，
+ * outer.Inner .show();
+ * 注意：当内部类中定义了静态成员，该内部类必须是静态的。
+ * 当外部类中静态方法访问内部类时，内部类也必须是静态的
+ * 当描述事物时，事物的内部还有事物，该事物用内部类来描述，
+ * 因为内部事物在使用外部事物的内容。
+
+### 异常
+
+异常：程序在运行的时候出现的不正常情况
+* 异常由来：问题是现实生活中的一个具体的事物，也可以通过java的类的形式进行描述，并封装对象，其实就是对java不正常的情况描述
+* 对于严重的，Error进行描述，对于Error不编写针对性的代码进行处理，
+* 非严重的java，通过Exception进行描述，对于Exception不编写针对性的代码进行处理
+
+ Throwable
+
+​      ----Erro
+
+​      ----Exception
+
+**异常的处理**
+
+```
+try {
+   //需要检查得代码块
+}catch (异常类 变量){
+   //异常处理的方式：（处理方式）
+ }finally {
+  // 一定会执行的语句：
+ }
+```
+
+对获取到的异常对象进行处理的方法：
+* e.getMessage()：  返回此throwable的详细消息字符串。 
+* e.toString():
+* e.printStackTrace():异常名称；异常信息，异常出现的位置,其实jvm默认的异常处理机制，就是调用printStackTrace方法，打印异常的堆栈   的跟踪信息
+
+```
+public class ExceptionDemo {
+   public static void main(String[] args) {
+      Demo demo = new Demo();
+      try{
+         int x = demo.div(4, 0);
+         System.out.println("x:" + x);
+         }catch (Exception e){ //Exception e = new ArithmeticException();
+         
+         System.out.println("出零了:"+e);
+         System.out.println("异常信息"+e.getMessage());//结果：by zero
+         System.out.println("异常信息2"+e.toString());//java.lang.ArithmeticException: / by zero
+         e.printStackTrace(); //异常名称；异常信息，异常出现的位置,其实jvm默认的异常处理机制，就是调用printStackTrace方法，打印异常的          堆栈的跟踪信息
+       }
+       System.out.println("结束");
+   }
+}
+
+class Demo {
+   int div(int a, int b) throws Exception{ //在功能上通过throws关键字来声明该功能可能出现问题
+      return a / b;
+   }
+}
+```
+
+### 线程
+
+#### 进程
+
+#### 线程
+
+#### 多线程的意义
+
+
+
