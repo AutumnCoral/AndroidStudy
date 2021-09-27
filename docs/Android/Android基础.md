@@ -6,7 +6,7 @@
 
 #### 		Activity
 
-
+Activity是一种可以包含用户界面的组件，主要用户与用户进行交互		
 
 #### 		Service
 

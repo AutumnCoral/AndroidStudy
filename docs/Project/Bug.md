@@ -13,3 +13,8 @@ while (it.hasNext()) {
     map.put(key, value);
 }
 
+# com.yl.clean
+
+1,![错误1--APP报错](../media/pictures/Bug.assets/错误1--APP报错.png)
+
+分析：1，没有找到启动类，在Mainfest
