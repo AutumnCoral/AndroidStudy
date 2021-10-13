@@ -2,7 +2,7 @@
 
 **学习书籍：java核心1技术 卷I ,卷II**
 
-**视频：黑马**
+**视频：****黑马毕向东****
 
 ## 第1课java基础语法
 
@@ -106,9 +106,306 @@ forEach=7
 
 **注意：**数组的长度可以为0
 
+```
+public static void main(String[] args) {
+   // 初始化数组
+   int[] a = {2, 5, 4, 6, 7};
+   int[] b = StaticToolDemo.bubbleSort(a);//冒泡排序
+   int[][] c = {{2, 3}, {1, 0}, {4, 45}};
+   Arrays.sort(a); //排序
+   // 输出数组
+   System.out.println("b=" + Arrays.toString(b));// Arrays.toString：打印数组中的元素
+   System.out.println("sort=" + Arrays.toString(a));// Arrays.sort：对数组中的元素进行排序,按升序
+   /*
+   注： *c:[[I@15db9742, [I@6d06d69c, [I@7852e922]* 这种输出结果是因为：c是一个二维数组。相当于一个长度为3的数组，但是这个数组的元素还是是数组。
+        当执行Arrays.toString的时候相当于遍历数组，并且输出数组的元素，但是这个数组的元素是数组，所以这里输出的是数组元素的地址。
+        
+        Arrays.deepToString()与Arrays.toString()的区别
+        Arrays.deepToString()主要用于数组中还有数组的情况，而Arrays.toString()则相反，对于Arrays.toString()而言，当数组中有数组时，不会打印出数组中的内容，只会以地址的形式打印出来。
+
+    */
+   System.out.println("c二维数组=" + Arrays.toString(c));//输出结果：c=[[I@1540e19d, [I@677327b6, [I@14ae5a5]
+   System.out.println("deepToString=" + Arrays.deepToString(c));
+   
+   /*
+   java遍历数组的方法：fori,forEach,
+    forEach：遍历数组中的每个元素，且不需要下标
+    */
+   for (int forEach : a) {
+      System.out.println("forEach=" + forEach);
+   }
+   for (int i = 0; i < a.length; i++) {
+      System.out.println("for遍历:" + a[i]);
+   }
+   /*
+   数组类型转换
+    */
+   String arrStrings=Arrays.toString(a);
+   System.out.println("arrStrings:"+arrStrings);
+   /*
+   数组中是否包含一个值
+    */
+   if (Arrays.asList(a).contains(1)){
+      System.out.println("包含该元素1");
+   }else {
+      System.out.println("不包含该元素1");
+   }
+   /*
+   将数组转换为list
+    */
+   List<Integer>list = new ArrayList();
+   for (int i = 0; i <a.length ; i++) {
+      list.add(a[i]);
+   }
+   System.out.println("数组转换为list"+list);//输出：数组转换为list[2, 4, 5, 6, 7]
+}
+```
+
 #### 数组排序
 
 Arrays类中的sort方法
+
+## 集合
+
+### 集合框架
+
+数组存储对象长度固定的，集合的长度是可变的，数组中可以存储基本数据类型，集合只能存储对象
+
+在Java类库中，集合类的基本接口是Collection接口
+
+**集合有两个基本接口：Collection和Map**
+
+<img src="../media/pictures/JavaBase.assets/java-具体集合.png" alt="java-具体集合" style="zoom:33%;" />
+
+#### collection
+
+collection
+	list
+		ArrayList
+		LinkedList
+		Vector
+	set
+		HashSet
+		ThreeSet
+
+Queue
+
+为什么有这么多的容器？因为每个容器对应的数据的存储方式不同，这个存储方式称为数据结构
+
+##### collection中常见的方法
+
+
+
+| Modifier and Type        | Method and Description                                       |
+| ------------------------ | ------------------------------------------------------------ |
+| `boolean`                | `add(E e)`  确保此集合包含指定的元素（可选操作）。 **插入成功返回true，插入失败返回false** |
+| `boolean`                | `addAll(Collection<? extends E> c)`  将指定集合中的所有元素添加到此集合（可选操作）。 |
+| `void`                   | `clear()`  从此集合中删除所有元素（可选操作）。              |
+| `boolean`                | `contains(Object o)`  如果此集合包含指定的元素，则返回 `true` 。 |
+| `boolean`                | `containsAll(Collection<?> c)`  如果此集合包含指定 `集合`中的所有元素，则返回true。 |
+| `boolean`                | `equals(Object o)`  将指定的对象与此集合进行比较以获得相等性。 |
+| `int`                    | `hashCode()`  返回此集合的哈希码值。                         |
+| `boolean`                | `isEmpty()`  如果此集合不包含元素，则返回 `true` 。          |
+| `Iterator<E>`            | `iterator()`  返回此集合中的元素的迭代器。                   |
+| `default Stream<E>`      | `parallelStream()`  返回可能并行的 `Stream`与此集合作为其来源。 |
+| `boolean`                | `remove(Object o)`  从该集合中删除指定元素的单个实例（如果存在）（可选操作）。 |
+| `boolean`                | `removeAll(Collection<?> c)`  删除指定集合中包含的所有此集合的元素（可选操作）。 **去交集**，保留调用对象中不停的数据 |
+| `default boolean`        | `removeIf(Predicate<? super E> filter)`  删除满足给定谓词的此集合的所有元素。 |
+| `boolean`                | `retainAll(Collection<?> c)`  仅保留此集合中包含在指定集合中的元素（可选操作）。 |
+| `int`                    | `size()`  返回此集合中的元素数。                             |
+| `default Spliterator<E>` | `spliterator()`  创建一个[`Spliterator`](../../java/util/Spliterator.html)在这个集合中的元素。 |
+| `default Stream<E>`      | `stream()`  返回以此集合作为源的顺序 `Stream` 。             |
+| `Object[]`               | `toArray()`  返回一个包含此集合中所有元素的数组。 **//将集合转换为数组** |
+| `<T> T[]`                | `toArray(T[] a)`  返回包含此集合中所有元素的数组;  返回的数组的运行时类型是指定数组的运行时类型。 |
+
+```
+public static void main(String[] args) {
+   //创建一个集合容器，使用collection接口的子类，ArrayList
+   ArrayList<String> list = new ArrayList<>();
+   list.add("测试1");//all(Object b)
+   list.add("测试2");
+   list.add("测试3");
+   list.add("测试4");
+   System.out.println("size:" + list.size());//size:长度 输出结果：4
+   System.out.println("打印集合：" + list);//打印集合，输出结果：打印集合：[测试1, 测试2, 测试3, 测试4]
+   System.out.println("判断是否包含元素contains：" + list.contains("测试"));//判断是否包含某个元素，输出结果：判断元素：false
+   System.out.println("判断是否为空isEmpty：" + list.isEmpty());//判断是否isEmpty，输出结果：判断是否为空：false
+
+   ArrayList<String> list2 = new ArrayList<>();
+   list2.add("测试1");
+   list2.add("列表2");
+   //removeAll:删除指定集合中包含的所有此集合的元素（可选操作）。 此调用返回后，此集合将不包含与指定集合相同的元素。
+   // 包含要从此集合中删除的元素的集合 ,返回结果，删除相同的为true,否则为false
+   list.removeAll(list2);//取交集，lst只会保留和list2中不同的数据。
+   System.out.println("retainAll删除指定集合中包含的所有此集合的元素（:" + list);//结果retainAll:[测试2, 测试3, 测试4]
+   list2.toArray();// 将集合转换为数组
+   System.out.println("数组打印:"+ Arrays.toString(list2.toArray()));// 输出结果：数组打印:[测试1, 列表2]
+   list.addAll(list2);//将指定集合中的所有元素添加到此集合
+   System.out.println("addAll:"+list);
+   System.out.println("删除：" + list.remove("测试2"));//remove:删除元素，删除成功返回true,删除失败返回false
+   list.clear();//clear；清除所有元素
+
+}
+```
+
+##### 迭代器
+
+是一种访问集合的方法，即取出集合元素的值， iterator() 的主要使用方法next,hasnext,remove
+
+通过反复调用next，可以逐个访问集合中的每个元素。但是，如果到达了集合的末尾，next方法将抛出一个NoSuchElementException。因此，需要在调用next之前调用hasNext方法。如果迭代器对象还有多个供访问的元素，这个方法就返回true。如果想要查看集合中的所有元素，就请求一个迭代器，并在hasNext返回true时反复地调用next方法
+
+```
+public static void main(String[] args) {
+   List<String> list = new ArrayList<>();
+   list.add("1");
+   list.add("2");
+   list.add("3");
+   list.add("4");
+   // 方式1：Iterator
+   Iterator<String> it = list.iterator();// 获取迭代器
+   while (it.hasNext()) {// 循环取出集合中的元素
+      //it.remove(); 报错：java.lang.IllegalStateException
+      System.out.println("iterator:" + it.next()); //输出1，2,3,4
+      it.remove();// 对next方法和remove方法的调用具有互相依赖性。如果调用remove之前没有调用next将是不合法的
+   }
+   // 方式2：forEach
+   for (String num : list) {
+      System.out.println("forEach:" + num);//输出1，2,3,4
+   }
+}
+```
+
+###### forEachRemaining
+
+forEachRemaining()是java1.8新增的Iterator接口中的默认方法，可以不用循环，用forEachRemaining
+
+```
+Iterator iterator = arrayList.iterator();
+iterator.forEachRemaining(ele -> System.out.println("forEachRemaining"+ele));
+```
+
+##### collection的分类
+
+list:元素是有序的。元素可以重复。因为该集合体系有索引
+* ArrayList:底层的数据结构使用的是数组结构，查询速度很快，但是增删稍慢 	 ，线程不同步	
+  * LinkedList：底层使用的是链表数据结构，特点：增删很快，查询稍慢
+  * Vector：底层输数组数据结构。线程同步，被ArrayList替代了
+
+set：元素是无序的，元素不可以重复
+* HashSet：  线程不安全，存取速度快。底层是以哈希表实现的。
+* ThreeSet： 红-黑树的数据结构，默认对元素进行自然排序（String）
+
+list特有的方法
+
+**增**
+
+* add(int index, E element)：在此列表中的指定位置插入指定的元素
+* addAll(int index, Collection<? extends E> c) ：将指定集合中的所有元素插入到此列表中，从指定的位置开始。
+
+**删**
+
+* remove(int index)：删除该列表中指定位置的元素。
+
+**改**
+
+* set(int index, E element) ：用指定的元素替换此列表中指定位置的元素。该元素以前在指定的位置 
+
+**查**
+
+* get(int index) ：返回此列表中指定位置的元素。public E get(int index)返回此列表中指定位置的元素。
+* subList(int fromIndex, int toIndex) ：返回此列表之间的部分视图 fromIndex ，包容和 toIndex ，排斥。
+
+List集合特有的迭代器。ListIterator是Iterator的子接口。
+
+在迭代时,不可以通过集合对象的方法操作集合中的元素[因为会发生concurrentModificationException异常。
+
+所以，在迭代器时，只能用迭代器的放过操作元素，可是Iterator方法是有限的，只能对元素进行判断,取出,删除的操作,
+
+如果想要其他的操作如添加，修改等，就需要使用其子接口，ListIterator.
+
+该接口只能通过List集合的1istIterator方法获取。
+
+###### list
+
+ LinkedList:特有方法:
+* addFirst () ;
+* addLast ();
+* getFirst ( );
+* getLast ();获取元素但是不删除值
+* removeFirst() ;
+* removeLast();获取元素但是值删除
+
+```
+public static void main(String[] args) {
+   LinkedList<String> linkedList = new LinkedList<>();
+   linkedList.addLast("测试1");
+   linkedList.addLast("测试2");
+   linkedList.addLast("测试3");
+   linkedList.addLast("测试4");
+   System.out.println("getFirst:"+linkedList.getFirst());//输出结果：getFirst:测试1
+   System.out.println("getLast:"+linkedList.getLast());//输出结果：getLast:测试4
+   System.out.println("list:"+linkedList);//输出结果：list:[测试1, 测试2, 测试3, 测试4]
+   System.out.println("removeFirst:"+linkedList.removeFirst()); // 输出结果：removeFirst:测试1
+   System.out.println("removeLast:"+linkedList.removeLast()); // 输出结果：removeLast:测试4
+   System.out.println("list2:"+linkedList); //输出结果 list2:[测试2, 测试3]
+   
+}
+```
+
+###### set
+
+元素无序，但是元素不可以重复，set的功能和collection的一致
+
+**HashSet**：线程不安全，存取速度快。底层是以哈希表实现的
+
+哈希表边存放的是哈希值。HashSet存储元素的顺序并不是按照存入时的顺序（和List显然不同） 是按照哈希值来存的所以取数据也是按照哈希值取得。
+
+HashSet不存入重复元素的规则.使用hashcode和equals
+
+由于Set集合是不能存入重复元素的集合。那么HashSet也是具备这一特性的。HashSet如何检查重复？HashSet会通过元素的hashcode（）和equals方法进行判断元素师否重复。
+
+当你试图把对象加入HashSet时，HashSet会使用对象的hashCode来判断对象加入的位置。同时也会与其他已经加入的对象的hashCode进行比较，如果没有相等的hashCode，HashSet就会假设对象没有重复出现。
+
+简单一句话，如果对象的hashCode值是不同的，那么HashSet会认为对象是不可能相等的。
+
+因此我们自定义类的时候需要重写hashCode，来确保对象具有相同的hashCode值。
+
+如果元素(对象)的hashCode值相同,是不是就无法存入HashSet中了? 当然不是,会继续使用equals 进行比较.如果 equals为true 那么HashSet认为新加入的对象重复了,所以加入失败。如果equals 为false那么HashSet 认为新加入的对象没有重复.新元素可以存入.
+
+
+
+```
+HashSet是如何保证元素的唯一性，是通过HashCode和equals，如果HashCode的元素的值相同，才会判断equals的值为true，如果HashCode的元素的值不相同，不会调用equals
+ 对于判断元素是否存在，以及删除操作，依赖的方法是元素的hashcode和equals
+
+
+/*
+		HashSet是值是唯一的，但是没有顺序
+		 */
+		HashSet<Person> set = new HashSet();
+		set.add(new Person("李四", 23));
+		set.add(new Person("哈哈哈", 23));
+		set.add(new Person("拟好", 21));
+		set.add(new Person("庄三", 33));
+
+		for (Person p : set) {
+			System.out.println(p.getName() + p.getAge()); // 结果：哈哈哈23 庄三33 李四23 拟好21
+		}
+
+		System.out.println("-------------------------------");
+		/**
+		 * 要想实现顺序，可以用LinkedHashSet，数据存储采用链表+哈希表组合的形式
+		 */
+		HashSet<Person> linkedSet = new LinkedHashSet<>();
+		linkedSet.add(new Person("李四", 23));
+		linkedSet.add(new Person("哈哈哈", 23));
+		linkedSet.add(new Person("拟好", 21));
+		linkedSet.add(new Person("庄三", 33));
+		for (Person p : linkedSet) {
+			System.out.println(p.getName() + p.getAge());//结果：李四23 哈哈哈23  拟好2 庄三33
+		}
+	}
+```
 
 ## 第4课，对象和类
 

@@ -122,67 +122,9 @@ toChar(): Char
 >- 编译时常量只能是常见的基本数据类型:String.Int、Double、Float、Long、
 >  Short、Byte、Char、Boolean。
 
-##  函数
-
-![Kotlin_函数](../media/pictures/KotlinBase.assets/Kotlin_函数.png)
-
-关于函数，[看一参考一下这位博主写的](https://juejin.cn/post/6975384870675546126)
-
-**main函数是程序的入口函数，程序一旦运行，就是从main()函数开始执行的**
-
-fun（function的简写）是定义函数的关键字，无论你定义什么函数，都一定要使用fun来声明。
-
-```
-fun main() {
-    val  a = 10
-    println("a = "+a)
-}
-```
-
-注意：fun用来修饰函数，方法名可以自己定义，方法里带的参数格式为
-
-### 普通函数
-
-### 标准函数
-
-任何Kotlin代码都可以自由地调用所有的标准函数。
-
-**let,with,runmapply,repeat**
-
-- let:主要作用就是配合?.操作符来进行辅助判空处理
-- with
-
-### 静态函数
-
-companion  object ，@JvmStatic
-
-### kotlin高阶函数
-
-### 匿名函数
-
-1，定义的时候不取名字的函数，称为匿名函数，匿名函数通常整体传递给其他函数，或者从其他函数返回，**变量有类型，变量可以等于函数，函数也会有类型，函数的类型，由传入的参数和返回值类型决定**
-
-2，	和具名函数不一样，除了极少数情况，匿名函数不需要return关键字来返回数据，匿名函数会隐式或者自定返回函数体最后一行语句的结果
-
-函数参数
-
-和具名函数一样，匿名函数可以不带参数，也可以带一个或多个任何类型的参数，**需要带参数时，参数的类型放在匿名函数的类型定义中，参数名则放在函数定义中。**
-
-### Unit函数
-
-在kotlin中函数没有返回值的的函数叫unit函数，返回类型为unit，在java中void的没有返回值
-
-### Nothing类型
-
-TODO函数的任务就是抛出异常，返回Nothing类型
-
-```
-public inline fun TODO(): Nothing = throw NotImplementedError()
-```
-
-![反引号中的函数](../media/pictures/KotlinBase.assets/反引号中的函数.png)
-
 ## 数据类型
+
+
 
 >Java有两种数据类型:引用类型与基本数据类型。
 >Kotlin只提供引用类型这一种数据类型，出于更高性能的需要，Kotlin编译器会在Java字节码中改用基本数据类型。
@@ -222,30 +164,53 @@ toDouble(): Double
 toChar(): Char
 ```
 
-## 数组
+## 容器
 
-数组用类 Array 实现，并且还有一个 size 属性及 get 和 set 方法，由于使用 [] 重载了 get 和 set 方法，所以我们可以通过下标很方便的获取或者设置数组对应位置的值
+容器：存放数据的载体，容器1分为数组，
 
-```kotlin
-fun main() {
-    // 第一种形式
-    val numbers = arrayOf(1, 2, 3, 4, 5, 6, 7, 8)
-     println(numbers[0]) //输出1
-     println(numbers[7]) //输出8
-    for (number in numbers) {
-         println(number) // 输出1 2 3 4 5 6 7 8
-    }
+### 数组
 
-    // 第二种形式  value=0     长度为10，然后根据value+200循环赋值
-    val numbers2 = Array(10,  {value: Int -> (value + 200) })
-    for (value in numbers2) {
-        println(value) //输出200 201 202 203 204 205 206 207 208 209
+#### 数组定义
 
-    }
-}
+在学习的时候可以对比着java进行学习
+
+数组：初始化时候指定容器的大小，不可以动态的调整大小。元素安顺序存储在一连串的内存段上
+
+#### kotlin 数组的创建
+
+**声明对象数组的三种形式：**
+
+(1)使用arrayOf函数和指定的数组元素创建数组，必须指定数组的元素，可以为任意类型
+
+```
+//Java写法:
+String[] params1 = {"str1", "str2", "str3"};
+//kotlin写法:`
+val params1 = arrayOf("str1", "str2", "str3")
 ```
 
-注意：
+(2).使用arrayOfNulls函数创建一个指定大小的并初始化每个元素为null的数组，但是必须指定元素的类型
+
+```
+//Java写法:
+String[] params2 = new String[12];
+
+//kotlin写法:
+val params2 = arrayOfNulls<String>(12)
+```
+
+(3)Array构造方法指定数组大小和一个生成元素的lambda表达式
+
+这种方法创建的数组，其中的每个元素都是非空的
+
+```
+//kotlin写法:
+val params3 = Array<String>(3){i -> "str" + i }
+// 也可以这么写
+val params=Array(3){"str$it"}
+```
+
+#### 基本数据类型数组
 
 - [] 运算符代表调用成员函数 get() 和 set()。数组是不可变的
 
@@ -255,9 +220,231 @@ fun main() {
    val x: IntArray = intArrayOf(1, 2, 3)
    x[0] = x[1] + x[2]
    println(x[0])  //输出5
+   
+    val inArray = IntArray(5)
+    inArray[0]= 2
+    // 创建一个长度为5，值全部为100的整型数组intArray[100,100,100,100,100]
+    val intArray2 = IntArray(5){100}
+    //这里it是它的索引值，所以创建一个长度为5的intArray[0,2.4,8,16],it是lamble是专有表达式，这里代表数组的下标
+    val intArray3 = IntArray(5){it*2 } //{i -> i*2}
   ```
 
-## 字符串	
+|          | kotlin        | java        |
+| -------- | ------------- | ----------- |
+| 整型     | IntArray      | int[]       |
+| 整型装箱 | Array<Int>    | Integer[]   |
+| 字符     | CharArray     | char[]      |
+| 字符装箱 | Array<Char>   | Character[] |
+| 字符串   | Array<String> | String[]    |
+|          |               |             |
+
+#### 数组的遍历
+
+**java遍历数组**
+
+```
+/*
+java遍历数组的方法：fori,forEach,
+ forEach：遍历数组中的每个元素，且不需要下标
+ */
+for (int forEach : a) {
+   System.out.println("forEach=" + forEach);
+}
+for (int i = 0 ; i< a.length;i++){
+   System.out.println("for遍历:"+a[i]);
+}
+```
+
+**kotlin遍历数组**
+
+方法一：for-in
+
+```
+val numbers2 = Array(10, { value: Int -> (value + 200) })
+// 数组for循环遍历 for-in
+for (value in numbers2) {
+    println(value) //输出200 201 202 203 204 205 206 207 208 209
+}
+// for-in的加强版： 根据下标在取出数组中的元素
+    for (i:Int in numbers2.indices){
+    println(i.toString()+"->"+numbers2[i])//输出结果0->200 1->201 2->202 3->203 4->204 5->205 6->206 7->207 8->208 9->209
+    }
+```
+
+方法2：forEach
+
+```
+numbers2.forEach { 
+   println("forEach:$it") 
+}
+   // forEach加强版，同时遍历下标和元素 
+    numbers2.forEachIndexed{index, i ->
+        println("$index:$i")
+    }
+```
+
+
+
+#### 数组的替换值
+
+数组用类 Array 实现，并且还有一个 size 属性及 get 和 set 方法，由于使用 [] 重载了 get 和 set 方法，所以我们可以通过下标很方便的获取或者设置数组对应位置的值
+
+#### 字符数组转换成字符串
+
+    fun main() {
+        // 第一种形式建立数组arrayOf
+        val numbers = arrayOf(1, 2, 3, 4, 5, 6, 7, 8)
+         println(numbers[0]) //输出1
+         println(numbers[7]) //输出8
+         // 数组遍历
+        for (number in numbers) { 
+             println(number) // 输出1 2 3 4 5 6 7 8
+        }
+    // 第二种形式 Array value=0     长度为10，然后根据value+200循环赋值
+    val numbers2 = Array(10,  {value: Int -> (value + 200) })
+    for (value in numbers2) {
+        println(value) //输出200 201 202 203 204 205 206 207 208 209
+    
+    }
+}
+
+### 集合
+
+#### 集合的分类
+
+
+
+[参考学习1](https://www.jianshu.com/p/fa5abe312269)
+
+[参考学习2](https://www.songyubao.com/book/primary/kotlin/kotlin-data-collection.html)
+
+与数组不同的是集合的大小可以任意改变	，按照类型分类
+
+- list:是一个有序列表，可以通过索引(下标)访问列表。元素可以在列表中出现多次，可以重复
+- set:是唯一的元素集合，一组无重复数据的对象，一般来说set中元素的顺序并不重要
+- map：（字典）键值对，键是唯一的，每个键刚好映射到一个值，值可以重复
+
+按照可变性分类
+
+- 可变集合
+- 不可变集合
+
+具体来说
+ 对于List
+
+- List ——声明不可变List集合
+- MutableList——声明可变List集合
+
+对于Map
+
+- Map——声明不可变Map集合
+- MutableMap——声明可变Map集合
+
+对于Set
+
+- Set——声明不可变Set集合
+- MutableSet——声明可变Set集合
+
+除此之外还有四个基本接口
+
+- Iterable ——所有集合的父类
+- MutableIterable —— 继承于Iterabl接口，支持遍历的同时可以执行删除操作
+- Collection —— 继承于Iterable接口，仅封装了对集合的只读方法
+- MutableCollection ——继承于Iterable,Collection，封装了添加或移除集合中元素的方法
+
+| 类型 | 数组创建方式                                           | 示例                                                         | 说明                                        | 是否可变 |
+| ---- | ------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------- | -------- |
+| list | arrayListOf<T>() mutableListOf<T> 相同元素类型的队列   | val array = arrayListOf<Int>(1, 2, 3) val array = mutableListOf<String>() | - 必须指定元素类型                          | 可变     |
+|      | listOf<T>() 相同元素类型的集合                         | val array = listOf<Int>(1, 2, 3)                             | - 必须指定元素类型 - 必须指定初始化数据元素 | 不可变   |
+| map  | arrayMapOf<K,V>() mutableMapOf<K,V> 相同元素类型的字典 | val array= arrayMapOf(Pair("key","value")) val array= mutableMapOf() | - 初始元素使用Pair包装                      | 可变     |
+|      | mapOf<T>() 相同元素类型的字典                          | val array= mapOf(Pair("key","value"))                        | - 元素使用Pair包装 - 必须指定初始元素       | 不可变   |
+| set  | arraySetOf<T>() mutableSetOf<T> 相同元素类型的集合     | val array= arraySetOf<TInt>(1,2,3) val array= mutableSetOf<Int>() | - 会对元素自动去重                          | 可变     |
+|      | setOf<T>() 相同元素类型的集合                          | val array= arraySetOf<Int>(1,2,3)                            | - 对元素自动去重 - 必须指定元素类型。       | 不可变   |
+
+##### list
+
+**可变**
+
+```
+列表的创建---可变列表，必须指定元素类型
+val arrayString = mutableListOf<String>()
+arrayString.add("1")
+arrayString.add("2")
+arrayString.add("3")
+arrayString.add(3, "4")
+val arrayString2 = mutableListOf<String>("1", "2", "3", "4")
+val iterator = arrayString2.iterator()
+iterator.forEach { println("it:${it}") }// forEach循环遍历list中元素
+println("add-index:${arrayString2.add(2, "33")}") // 指定位置插入元素
+println("add:${arrayString2.add("34")}") //不指定位置插入元素，输出结果true
+println("removeAt:${arrayString2.removeAt(3)}") //移除指定位置的元素
+println("clear:${arrayString2.clear()}")// 集合中的元素会被清除
+arrayString2.forEach {
+    println("reverse:${arrayString2.reverse()}")//集合元素翻转  
+}
+arrayString2.sort()//排序。从小到大进行排序
+```
+
+**不可变**
+
+```
+//列表的创建---不可变列表，必须指定元素类型，必须指定初始化数据元素
+val arrayInt = listOf<Int>(1, 2, 3, 4)
+```
+
+##### map
+
+**可变**
+
+```
+//map--可变，使用Pair指定集合中初始化的元素
+val arrayMap3 = mutableMapOf<String, String>()
+arrayMap3["1"] = "1"
+arrayMap3["2"] = "2"
+arrayMap3["3"] = "3"
+```
+
+**不可变**
+
+```
+// map---不可变字典，不可动态添加，删除元素
+val arrayMap = mapOf(Pair("key", "value"))
+val arrayMap2 = mapOf<String, String>()
+```
+
+##### set
+
+**可变**
+
+```
+// set:可变集合
+val set = mutableSetOf<String>()
+set.add("1")
+set.add("2")
+set.add("3")
+set.add("4")
+for (item in set) {
+    println(item)
+}
+val set2 = mutableSetOf<String>("1", "2", "4")
+print("isEmpty:${set2.isEmpty()}")//isEmpty
+print("contain:${set2.contains("6")}")//contains
+```
+
+**不可变**
+
+```
+//set:不可变集合,元素唯一
+val set3 = setOf<String>()
+```
+
+#### 集合的操作
+
+add:添加元素确实改变了集合就返回true，如果集合没有发生变化就返回false。
+
+![集合的操作](../media/pictures/KotlinBase.assets/集合的操作.png)
+
+## 字符串
 
 和 Java 一样，String 是不可变的。方括号 **[] 语法可以很方便的获取字符串中的某个字符**，也可以通过 for 循环来遍历：
 
@@ -268,8 +455,6 @@ val  str:String = "Hello Word"
         println(c)  //输出 H e l l o W o r d（所有字符）
     }
 ```
-
-- 字符串可以用+进行拼接
 
 - [更多字符串的操作请参考下面博主的连接](https://juejin.cn/post/6844903613869883405)
 
@@ -311,7 +496,16 @@ fun main(args: Array<String>) {
     val str = "$s.length is ${s.length}" // 求值结果为 "runoob.length is 6"
     println(str)
 }
+
 ```
+
+### 字符串拼接
+
+字符串的拼接可以使用+
+
+### 字符串的转义
+
+/n：换行
 
 # 条件控制结构
 
@@ -504,6 +698,68 @@ class Person constructor(firstName: String) {}
 class Person(firstName: String) {
 }
 ```
+
+ 
+
+##  函数
+
+![Kotlin_函数](../media/pictures/KotlinBase.assets/Kotlin_函数.png)
+
+关于函数，[看一参考一下这位博主写的](https://juejin.cn/post/6975384870675546126)
+
+**main函数是程序的入口函数，程序一旦运行，就是从main()函数开始执行的**
+
+fun（function的简写）是定义函数的关键字，无论你定义什么函数，都一定要使用fun来声明。
+
+```
+fun main() {
+    val  a = 10
+    println("a = "+a)
+}
+```
+
+注意：fun用来修饰函数，方法名可以自己定义，方法里带的参数格式为
+
+### 普通函数
+
+### 标准函数
+
+任何Kotlin代码都可以自由地调用所有的标准函数。
+
+**let,with,runmapply,repeat**
+
+- let:主要作用就是配合?.操作符来进行辅助判空处理
+- with
+
+### 静态函数
+
+companion  object ，@JvmStatic
+
+### kotlin高阶函数
+
+### 匿名函数
+
+1，定义的时候不取名字的函数，称为匿名函数，匿名函数通常整体传递给其他函数，或者从其他函数返回，**变量有类型，变量可以等于函数，函数也会有类型，函数的类型，由传入的参数和返回值类型决定**
+
+2，	和具名函数不一样，除了极少数情况，匿名函数不需要return关键字来返回数据，匿名函数会隐式或者自定返回函数体最后一行语句的结果
+
+函数参数
+
+和具名函数一样，匿名函数可以不带参数，也可以带一个或多个任何类型的参数，**需要带参数时，参数的类型放在匿名函数的类型定义中，参数名则放在函数定义中。**
+
+### Unit函数
+
+在kotlin中函数没有返回值的的函数叫unit函数，返回类型为unit，在java中void的没有返回值
+
+### Nothing类型
+
+TODO函数的任务就是抛出异常，返回Nothing类型
+
+```
+public inline fun TODO(): Nothing = throw NotImplementedError()
+```
+
+![反引号中的函数](../media/pictures/KotlinBase.assets/反引号中的函数.png)
 
 ## 继承/构造函数
 
