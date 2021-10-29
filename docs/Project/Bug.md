@@ -18,3 +18,13 @@ while (it.hasNext()) {
 1,![错误1--APP报错](../media/pictures/Bug.assets/错误1--APP报错.png)
 
 分析：1，没有找到启动类，在Mainfest
+
+An exception occurred applying plugin request [id: 'com.android.application']
+> Failed to apply plugin 'com.android.internal.application'.
+> Android Gradle plugin requires Java 11 to run. You are currently using Java 1.8.
+> You can try some of the following options:
+>      - changing the IDE settings.
+>           - changing the JAVA_HOME environment variable.
+>           - changing `org.gradle.java.home` in `gradle.properties`.
+
+原因，jdk版本太低

@@ -8,7 +8,12 @@
 
 参考3：[菜鸟教程](https://www.runoob.com/kotlin/kotlin-tutorial.html)
 
-# Kotlin Android 环境搭建
+- [Kotlin官网文档](https://kotlinlang.org/docs/reference/)
+- [kotlin中文官网文档](http://www.kotlincn.net/docs/reference/)
+- [Kotlin在线IDE](https://try.kotlinlang.org/)
+- [Kotlin On Github](https://github.com/JetBrains/kotlin)
+
+# Kotlin
 
 # 基础语法
 
@@ -53,7 +58,86 @@ fun main() {
 
 var a:Int= 10
 
+### 常量和静态方法
+
+[学习](https://www.jianshu.com/p/e8752c880088)
+
+编译时常量
+
+>- 只读变量并非绝对只读。
+>- **编译时常量只能在函数之外（包含main方法）定义**，因为编译时常量必须在编译时赋值，而函数都
+>  是在运行时才调用，函数内的变量也是在运行时赋值，编译时常量要在这些变量赋值前就已存在。
+>- 编译时常量只能是常见的基本数据类型:String.Int、Double、Float、Long、
+>  Short、Byte、Char、Boolean。
+
+`val`关键字前面加上`const`关键字
+
+```
+const val NUM_A = 6
+```
+
+其特点：**`const`只能修饰`val`，不能修饰`var`**
+
+1. 在顶层声明
+
+2. 在`object`修饰的类中声明，在`kotlin`中称为**对象声明**，它相当于`Java`中一种形式的单例类
+
+3. 在伴生对象中声明
+
+   ```
+   // 在顶层声明
+    const val TEXT_NUM1 ="在顶层声明的常量" 
+   fun main(args: Array<String>) {
+       println("顶层声明：${TEXT_NUM1}")
+       println("在object修饰的类中：${TestConst.TEXT_NUM2}")
+       println("伴生对象中声明：${TestClass.TEXT_NUM3}")
+   
+   }
+   object TestConst{
+       const val TEXT_NUM2 ="在object修饰的类中"
+   }
+   class TestClass{
+       /*在这里也涉及到了一个子知识点companion object，需要进行学习下，与object的区别又啥呢
+         companion object 修饰为伴生对象,伴生对象在类中只能存在一个，类似于java中的静态方法 Java 中使用类访问静态成员，静态方法。
+        */
+       companion object {
+           const val TEXT_NUM3 ="伴生对象中声明"
+       }
+   }
+   
+   输出结果：顶层声明：在顶层声明的常量
+           在object修饰的类中：在object修饰的类中
+           伴生对象中声明：伴生对象中声明
+   ```
+
+## 关键字
+
+### open
+
+在学习open的时候，可以在学习下java中的final在进行学习下
+
+- 在 Java 开发中默认可以被继承的类不需要添加 final 关键字，如需不想被继承例如 String 类添加 final 修饰类。
+
+- **在**Kotlin开发中类和方法默认不允许被继承和重写，等同于Java中用 final 修饰类和方法。
+  如果在Kotlin 中类和方法想被继承和重写，需添加open 关键字修饰。
+
+- ```
+  open class Person
+  open class Student : Person() 
+  ```
+
+## 数据类型
+
+
+
+>Java有两种数据类型:引用类型与基本数据类型。
+>Kotlin只提供引用类型这一种数据类型，出于更高性能的需要，Kotlin编译器会在Java字节码中改用基本数据类型。
+>
+>
+
 ### 基本数据类型
+
+#### 基本数据类型的分类
 
 在java中数据类型分为基本基本数据类型基和引用数据类型
 
@@ -109,27 +193,12 @@ toChar(): Char
 
 ```
  //var str:String ="Hello word"
-    var str ="Hello word" //类型推断：对于已经声明并且赋值的变量，他允许你省略定义的类型
+  var str ="Hello word" //类型推断：对于已经声明并且赋值的变量，他允许你省略定义的类型
 ```
 
-### 常量
-
-编译时常量
-
->- 只读变量并非绝对只读。
->- **编译时常量只能在函数之外定义**，因为编译时常量必须在编译时赋值，而函数都
->  是在运行时才调用，函数内的变量也是在运行时赋值，编译时常量要在这些变量赋值前就已存在。
->- 编译时常量只能是常见的基本数据类型:String.Int、Double、Float、Long、
->  Short、Byte、Char、Boolean。
-
-## 数据类型
 
 
-
->Java有两种数据类型:引用类型与基本数据类型。
->Kotlin只提供引用类型这一种数据类型，出于更高性能的需要，Kotlin编译器会在Java字节码中改用基本数据类型。
-
-## 比较值的大小
+### 比较值的大小
 
 在 Kotlin 中，三个等号 === 表示比较对象地址，两个 == 表示比较两个值大小。（==相当于java中的equal）
 
@@ -152,7 +221,9 @@ fun main() {
 }
 ```
 
-## **类型转换**
+### **类型转换**
+
+#### 显示转换
 
 ```
 toByte(): Byte
@@ -164,9 +235,105 @@ toDouble(): Double
 toChar(): Char
 ```
 
+### **位运算符**
+
+- ```
+  Kotlin中对于按位操作，和Java是有很大的差别的。
+  ```
+
+  ```
+  Kotlin中没有特殊的字符，但是只能命名为可以以中缀形式调用的函数，下列是按位操作的完整列表(仅适用于整形（Int）和长整形（Long）)：
+  ```
+
+  1. `shl(bits)` => 有符号向左移 (类似`Java`的`<<`)
+  2. `shr(bits)` => 有符号向右移 (类似`Java`的`>>`)
+  3. `ushr(bits)` => 无符号向右移 (类似`Java`的`>>>`)
+  4. `and(bits)` => 位运算符 `and` (同`Java`中的按位与)
+  5. `or(bits)` => 位运算符 `or` (同`Java`中的按位或)
+  6. `xor(bits)` => 位运算符 `xor` (同`Java`中的按位异或)
+  7. `inv()` => 位运算符 按位取反 (同`Java`中的按位取反)
+
+### 字符转义
+
+- `\t` => 表示制表符
+- `\n` => 表示换行符
+- `\b` => 表示退格键（键盘上的Back建）
+- `\r` => 表示键盘上的`Enter`键
+- `\\` => 表示反斜杠
+- `\'` => 表示单引号
+- `\"` => 表示双引号
+- `\$` => 表示美元符号，如果不转义在`kotlin`中就表示变量的引用了
+- 其他的任何字符请使用Unicode转义序列语法。例：'\uFF00'
+
+## 类型检测
+
+### 运算符
+
+#### is，!is，as，as?运算符
+
+1. **is，!is**
+
+-   在kotlin中通过is来进行类型的检测，**相当于java中instanceof**
+
+- **is运算符可以检查对象A是否是特定的类型，还可以检查一个对象是否属于某种数据类型（Int、String等）**。
+
+- Kotlin中我们可以在运行时通过 is 或者 !is 来检查对象是否符合所需的类型
+
+- ```
+  fun main(args: Array<String>) {
+      println("你好" is String)// 输出：true
+      println("你好" !is String)// 输出：false
+  
+  }
+  ```
+
+1. **as运算符和as?运算符**
+
+   **as运算符用于执行引用类型的显式类型转换**。如果要转换的类型与指定的类型兼容，转换就会成功进行；如果类型不兼容，使用as?运算符就会返回值null。在Kotlin中，父类是禁止转换为子类型的。
+
+   ```
+   fun main(args: Array<String>) {
+       val student =Student()
+       val person = Person()
+       println(student as Person ) // 输出Student@266474c2
+       println(person as Student )// 报错 :Exception in thread "main" java.lang.ClassCastException: Person cannot be
+       cast to Student
+       println((person as? Student))// 输出：null
+   }
+   open class Person
+   open class Student : Person() 
+   
+   ```
+
+```csharp
+JAVA
+
+if(view instanceof TextView) {
+    ((TextView) view).setText("text");
+}
+
+Kotlin
+
+if(view is TextView) {
+    (view as TextView).setText("text")
+}
+```
+
+#### 全调用符（?.）
+
+专门用于调用可空类型变量中的成员方法或属性，其语法格式为“变量?.成员”。其作用是判断变量是否为null，如果不为null才调用变量的成员方法或者属性。
+
+#### Elvis操作符（?:）
+
+在使用安全调用符调用可空变量中的成员方法或属性时，如果当前变量为空，则会返回一个null值，但有时即使当前变量为null，也不想返回一个null值而是指定一个默认值，此时该如何处理呢？为了解决这样的问题，Kotlin中提供了一个Elvis操作符（?:），通过Elvis操作符（?:）可以指定可空变量为null时，调用该变量中的成员方法或属性的返回值，其语法格式为“表达式?:表达式”。
+
+####  非空断言（!!.）
+
+除了通过使用安全调用符（?.）来使用可空类型的变量之外，还可以通过非空断言（!!.）来调用可空类型变量的成员方法或属性。使用非空断言时，调用变量成员方法或属性的语法结构为“变量!!.成员”。非空断言（!!.）会将任何变量（可空类型变量或者非空类型变量）转换为非空类型的变量，若该变量为空则抛出异常
+
 ## 容器
 
-容器：存放数据的载体，容器1分为数组，
+容器：存放数据的载体，容器分为数组和集合
 
 ### 数组
 
@@ -505,7 +672,26 @@ fun main(args: Array<String>) {
 
 ### 字符串的转义
 
-/n：换行
+**字符串字面量**
+
+> 在`Kotlin`中， 字符串字面量有两种类型：
+>
+> - 包含转义字符的字符串 转义包括（`\t`、`\n`等）,不包含转义字符串的也同属此类型
+> - 包含任意字符的字符串 由三重引号（`""" .... """`）表示
+
+## 注释
+
+kotlin中的注释几乎和java中的没啥区别，唯一区别就是在kotlin的多行注释可以嵌套多行注释，这在java中是不可以的
+
+```
+/**
+ * 第一个多行注释
+ *
+ * /**
+ * 第二个多行注释
+ * */
+ */
+```
 
 # 条件控制结构
 
@@ -571,7 +757,7 @@ when (x) {
 }
 ```
 
-另一种可能性是检测一个值是（is）或者不是（!is）一个特定类型的值。注意： 由于智能转换，你可以访问该类型的方法和属性而无需 任何额外的检测。
+**另一种可能性是检测一个值是（is）或者不是（!is）一个特定类型的值。注意： 由于智能转换，你可以访问该类型的方法和属性而无需 任何额外的检测。**
 
 ```
 fun hasPrefix(x: Any) = when(x) {
@@ -596,10 +782,12 @@ Java中主要有两种循环语句：while循环和for循环。而Kotlin也提�
 
 Kotlin在for循环方面做了很大幅度的修改，Java中最常用的for-i循环在Kotlin中直接被舍弃了，而Java中另一种for-each循环则被Kotlin进行了大幅度的加强，变成了for-in循环，所以我们只需要学习for-in循环的用法就可以了
 
-## 区间
+## 区间--range表达式
+
+**in是闭区间**，until可以取消闭区间
 
 ```
- for (i in 0..5){
+ for (i in 0..5){ //相当于for(int i; i<=5;i++)
         println(i)
     }
     输出值：0 1 2 3 4 5 
@@ -611,7 +799,7 @@ Kotlin在for循环方面做了很大幅度的修改，Java中最常用的for-i�
 
 - for-in循环最简单的用法了，我们遍历了区间中的每一个元素
 
-- Kotlin中可以使用until关键字来创建一个左闭右开的区间（默认情况下，for-in循环每次执行循环时会在区间范围内递增1）
+- **Kotlin中可以使用until关键字来创建一个左闭右开的区间（**默认情况下，for-in循环每次执行循环时会在区间范围内递增1）
 
   ```
   for (i in 0 until 5){
@@ -656,11 +844,18 @@ File通常是用于编写Kotlin顶层函数和扩展函数
 
 #### 类定义
 
-Kotlin中也是使用class关键字来声明一个类的 ，Kotlin 类可以包含：构造函数和初始化代码块、函数、属性、内部类、对象声明
+**Kotlin中也是使用class关键字来声明一个类的** ，
 
 ```
 class Person {.....}
 ```
+
+#### 类的组成
+
+Kotlin 类可以包含：构造函数和初始化代码块、函数、属性、内部类、对象声明
+
+- 在后面的文章说明汇总对于构造函数已经进行了说明，请查看1.1.4
+- 属性
 
 #### 类的属性
 
@@ -686,30 +881,95 @@ p.age = 19
 p.name = "WDD"
 ```
 
-Koltin 中的类可以有一个 主构造器，以及一个或多个次构造器，主构造器是类头部的一部分，位于类名称之后:
+####  构造函数
+
+**Koltin 中的类可以有一个 主构造器，以及一个或多个次构造器，主构造器是类头部的一部分**，位于类名称之后:
+
+- 主构造函数
 
 ```
-class Person constructor(firstName: String) {}
+class Person constructor(age: Int) {}
+--------等价于-------
+/*
+     因为是默认的可见性修饰符且不存在任何的注释符
+     故而主构造函数constructor关键字可以省略
+*/
+class Person(age: Int){
+      ...
+}
 ```
 
 如果主构造器没有任何注解，也没有任何可见度修饰符，那么constructor关键字可以省略。
 
 ```
-class Person(firstName: String) {
+class Person(age: String) {
 }
 ```
 
- 
+> - 构造函数中不能出现其他的代码，只能包含初始化代码。包含在初始化代码块中。
+> - 关键字：`init{...}`
+> - 值得注意的是，`init{...}`中能使用构造函数中的参数
 
-##  函数
+例：
 
-![Kotlin_函数](../media/pictures/KotlinBase.assets/Kotlin_函数.png)
+```
+fun main(args: Array<String>) {
+    // 类的实例化，会在下面讲解到，这里只是作为例子讲解打印结果
+    var test = Test(1)
+}
 
-关于函数，[看一参考一下这位博主写的](https://juejin.cn/post/6975384870675546126)
+class Person  constructor(var age : Int){
+    init {
+        age = 5
+        println("age = $age")
+    }
+}
+```
 
-**main函数是程序的入口函数，程序一旦运行，就是从main()函数开始执行的**
+**注意：**
 
-fun（function的简写）是定义函数的关键字，无论你定义什么函数，都一定要使用fun来声明。
+https://www.cnblogs.com/Jetictors/p/7758828.html
+
+constructor省略条件
+
+必须是在默认修饰符public修饰的条件下才可以省略，不然不可以省略，并且在修饰符的后面
+
+- 构造函数
+
+- `Kotlin`中支持二级构造函数。它们以`constructor`关键字作为前缀。
+
+- ```
+  class Person {
+      constructor(){
+          
+      }
+  }
+  ```
+
+#### 类的实例化
+
+在kotlin中，调用构造方法进行实例化，与Java不同的是，kotlin实例化不需要进行new
+
+```
+var test = Test()
+```
+
+### 修饰符
+
+- 可见修饰符合（注意和java的区别private，none(default)，protected，public）
+
+  - `public`修饰符表示 *公有* 。此修饰符的范围最大。当不声明任何修饰符时，系统会默认使用此修饰符。
+  - `internal`修饰符表示 *模块* 。对于`模块`的范围在下面会说明。
+  - `protected`修饰符表示 *私有`+`子类*。值得注意的是，此修饰符不能用于`顶层`声明。
+  - `private`修饰符表示 *私有* 。此修饰符的范围最小，即可见性范围最低。
+
+- 在类中使用情况
+
+  在类中都可以使用public，internal，protected，private进行修饰，也可以访问任意修饰符修饰的变量和，public，internal可以不同类中使用，private不可以，只能在本类中使用，protected不能那在顶层中修饰
+
+- 在接口中
+
+  只能由`public`修饰符修饰属性。方法可由`public`、`private`两个修饰符去修饰，但是，用`private`修饰符修饰符修饰的方法不能被实现该接口的类重写。
 
 ```
 fun main() {
@@ -719,6 +979,23 @@ fun main() {
 ```
 
 注意：fun用来修饰函数，方法名可以自己定义，方法里带的参数格式为
+
+##  函数
+
+![Kotlin_函数](../media/pictures/KotlinBase.assets/Kotlin_函数.png)
+
+关于函数，[看一参考一下这位博主写的](https://juejin.cn/post/6975384870675546126)
+
+**main函数是程序的入口函数，程序一旦运行，就是从main()函数开始执行的**
+
+**fun（function的简写）是定义函数的关键字，无论你定义什么函数，都一定要使用fun来声明。**
+
+- 定义格式为：`可见性修饰符 fun 函数名(参数名 ：类型,...) : 返回值{}`
+
+函数可以分为：
+
+- 从参数的2角度分为：有参函数，无参函数
+- 返回值的角度：有返回值，没返回值
 
 ### 普通函数
 
@@ -735,6 +1012,12 @@ fun main() {
 
 companion  object ，@JvmStatic
 
+**Kotlin中的object 与companion object的区别**
+
+[学习链接](https://www.jianshu.com/p/14db81e1576a)
+
+`companion object` 修饰为伴生对象,伴生对象在类中只能存在一个，类似于java中的静态方法 Java 中使用类访问静态成员，静态方法。
+
 ### kotlin高阶函数
 
 ### 匿名函数
@@ -749,6 +1032,8 @@ companion  object ，@JvmStatic
 
 ### Unit函数
 
+
+
 在kotlin中函数没有返回值的的函数叫unit函数，返回类型为unit，在java中void的没有返回值
 
 ### Nothing类型
@@ -761,11 +1046,21 @@ public inline fun TODO(): Nothing = throw NotImplementedError()
 
 ![反引号中的函数](../media/pictures/KotlinBase.assets/反引号中的函数.png)
 
+### 函数的参数
+
+函数的参数分为：具名函数，默认函数，可变函数
+
+具名函数：指在调用函数的时候指定形参的名称
+
+可变参数：可变参数，是指参数类型确定但个数不确定的参数，可变参数通过vararg关键字标识，我们可以将其理解为数组。可变参数通常声明在形参列表中的最后位置，如果不声明在最后位置，那么可变参数后面的其他参数都需要通过命名参数的形式进行传递。
+
+Kotlin中的可变参数与Java中的可变参数的对比Kotlin中可变参数规则：• 可变参数可以出现在参数列表的任意位置；• 可变参数是通过关键字vararg来修饰；• 可以以数组的形式使用可变参数的形参变量，实参中传递数组时，需要使用“*”前缀操作符。Java中可变参数规则：• 可变参数只能出现在参数列表的最后；• 用“…”代表可变参数，“…”位于变量类型与变量名称之间；• 调用含有可变参数的函数时，编译器为该可变参数隐式创建一个数组，在函数体中以数组的形式访问可变参数。
+
 ## 继承/构造函数
 
 ### 继承
 
-- Kotlin 中所有类都继承该 Any 类，它是所有类的超类，对于没有超类型声明的类是默认超类
+- **Kotlin 中所有类都继承该 Any 类，它是所有类的超类，对于没有超类型声明的类是默认超类**
 
   Any 默认提供了三个函数：
 
@@ -954,6 +1249,10 @@ cellphone1 equals cellphone2false
 如果没有data,会输出cellphone1 equals cellphone2false
 ```
 
+### open
+
+
+
 ### 单例类
 
 在Kotlin中创建一个单例类的方式极其简单，只需要将**class关键字改成object关键字**即可。
@@ -1107,3 +1406,6 @@ fun study(Study study?){
 
 **空指针检测，val与var推断，高级函数，匿名函数，函数类型和隐式返回，函数参数的学习，it关键字 ,匿名函数类型推断，lamba**
 
+# 泛型
+
+Any是Kotlin中所有类的共同基类，相当于Java中的Object，而Any？则表示允许传入空值。

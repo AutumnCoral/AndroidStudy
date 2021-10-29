@@ -1,3 +1,6 @@
+
+
+
 ### Android中fitsSystemWindows总结
 
 **属性说明**：fitsSystemWindows让添加了该属性的View可以根据窗口来调整View的布局位置，就是要考虑系统的窗口的位置。
