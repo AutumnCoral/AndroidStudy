@@ -167,7 +167,7 @@ const val NUM_A = 6
     x += 1           // 变量可修改
     ```
 
-#### 比较两个数字大小
+#### 比较两个数字大小==与===
 
 - 在 Kotlin 中，三个等号 === 表示比较对象地址，两个 == 表示比较两个值大小
 
@@ -319,9 +319,39 @@ if(view is TextView) {
 }
 ```
 
-#### 全调用符（?.）
+#### 可空？
+
+```
+fun main(args: Array<String>) {
+    // 第一种情况：默认不可空的情况。不能随意给null
+    val name: String = "Derry"
+    //报错：Null can not be a value of a non-null type String：不能为非空类型String的值
+    // name = null 
+    println("name:$name")
+    // 第二种情况：声明时指定为可空的类型
+    val name2: String ?
+    name2 = null
+   // name2 = "学习可空"
+    println("name2:$name2")
+}
+```
+
+
+
+#### 安 全调用符（?.）
 
 专门用于调用可空类型变量中的成员方法或属性，其语法格式为“变量?.成员”。其作用是判断变量是否为null，如果不为null才调用变量的成员方法或者属性。
+
+```
+fun main(args: Array<String>) {
+    var name: String? = "kotlin"
+    name = null
+    // 将首字母转换为大写
+    //name.capitalize() name是可空类型的，要想使用必须给出补救措施
+    name?.capitalize() // name为可空类型，当name为null的时候，？后面的不执行
+    println(name?.capitalize())
+}
+```
 
 #### Elvis操作符（?:）
 
@@ -668,7 +698,32 @@ fun main(args: Array<String>) {
 
 ### 字符串拼接
 
-字符串的拼接可以使用+
+java 中我们通常使用`StringBuilder`、`concat`或者`+`等方式来拼接字符串。**Kotlin中还可以使用字符串模板和`plus`**
+
+```
+// 字符串的拼接
+val a = "Hello"
+val b = "World"
+val c = "$a $b"
+val d = "$a $b！"
+val e = a.plus(" ").plus(b)
+val f = a.plus(" ").plus(b).plus("！")
+println("c:$c")
+println("d :$d")
+println("e:$e")
+println("f:$f")
+输出结果：c:Hello World
+d :Hello World！ 
+e:Hello World
+f:Hello World！
+反编译成java
+    a = "Hello";
+    String b = "World";
+    (new StringBuilder ()).append(a).append(' ').append(b).toString();
+    String d = a +' ' + b + '！';
+    (new StringBuilder ()).append(a + " ").append(b).toString();
+    String f = a +" " + b + "！";
+```
 
 ### 字符串的转义
 
@@ -678,6 +733,37 @@ fun main(args: Array<String>) {
 >
 > - 包含转义字符的字符串 转义包括（`\t`、`\n`等）,不包含转义字符串的也同属此类型
 > - 包含任意字符的字符串 由三重引号（`""" .... """`）表示
+
+### 字符串的截取subString
+
+subString和java中的用法几乎相同，可以查看java中的用法
+
+### split
+
+split返回的是list集合数据
+
+```
+val jsonTest = "AA,SS,DD,FF"
+val test = "Hello World"
+val test2 = "你好|World"
+val test3 = "你猜猜看.World"
+
+//list类型自动推断成List<String>
+val list = jsonTest.split(",")
+println(test.split(" "))//输出：[Hello, World]
+// 不接构输出
+println(list) //输出：[AA, SS, DD, FF]
+println(test2.split("|"))// 输出：[你好, World]
+println(test3.split(".")) //输出：[你猜猜看, World]
+// c++。解构，kotlin也有解构
+val (v1, v2, v3, v4) = list
+println("v1:$v1,v2:$v2,v3:$v3,v4:$v4") //输出：v1:AA,v2:SS,v3:DD,v4:FF
+}
+```
+
+### replace
+
+在kotlin中 replace的作用和在java中的基本一样，可以参考java中的学习
 
 ## 注释
 
@@ -691,6 +777,44 @@ kotlin中的注释几乎和java中的没啥区别，唯一区别就是在kotlin�
  * 第二个多行注释
  * */
  */
+```
+
+## 字符串判空
+
+在kotlin中提供了很多的实现不同功能的判空的方法
+
+![kotlin_字符串判空](../media/pictures/KotlinBase.assets/kotlin_字符串判空.png)
+
+
+
+- isBlank
+
+  等价于：str == null || str.length == 0 || str.trim().length == 0
+
+- isEmpty
+
+  等价于：str == null || str.length == 0
+
+- isNotBlank
+
+  等价于：str != null && str.length > 0 && str.trim().length > 0
+
+- isNullOrBlank
+
+- isNullOrEmpty
+
+  判断该字符串是否为`null`或者其`length`是否等于`0`
+
+```kotlin
+fun main(args: Array<String>) {
+    val str : String? = "kotlin"
+    println(str?.isEmpty()) //输出false 等价于str == null || str.length == 0
+    println(str?.isNotEmpty()) // 输出：true isEmpty的反结果
+    println(str.isNullOrEmpty()) // 输出：false 等价于str == null || str.length == 0
+    println(str?.isBlank()) //输出：false 等价于 str == null || str.length == 0 || str.trim().length == 0
+    println(str?.isNotBlank())  // 输出：true，isBlank的反结果 等价于str ！= null || str.length ！= 0
+    println(str.isNullOrBlank())  // 输出false
+}
 ```
 
 # 条件控制结构
@@ -980,6 +1104,25 @@ fun main() {
 
 注意：fun用来修饰函数，方法名可以自己定义，方法里带的参数格式为
 
+### 关键字
+
+#### it
+
+```
+un main(args: Array<String>) {
+    val method: (Int, Int, Int) -> String = { num1, num2, num3 ->
+        val num = 123456
+        "$num Derry 数字1：$num1,$num2.$num3 "
+    }
+    println(method(1, 2, 3))
+    /**
+     * 在kotlin中定义只有一个参数的匿名函数时候，可以使用it来代表参数名，当传入两个以上的值参数时候，it就不能使用了
+     */
+    val method2: (String) -> String = { "$it 你好" }
+    println(method2("星期四"))
+}
+```
+
 ##  函数
 
 ![Kotlin_函数](../media/pictures/KotlinBase.assets/Kotlin_函数.png)
@@ -1030,21 +1173,90 @@ companion  object ，@JvmStatic
 
 和具名函数一样，匿名函数可以不带参数，也可以带一个或多个任何类型的参数，**需要带参数时，参数的类型放在匿名函数的类型定义中，参数名则放在函数定义中。**
 
+#### 匿名函数的类型推断
+
+```
+fun main(args: Array<String>) {
+    //匿名函数：类型推断为String
+    //方法名：必须指定 参数类型和返回类型
+    // 方法名 = 类型推断返回类型
+    val method: (String) -> String = { "$it 你好" }
+    println(method("星期四"))
+    val method1 = { num1: Int, num2: Int, num3: Int ->
+        "num1:$num1,num2:$num2,num3:$num3"
+    }
+    // method1等价于下面的method2
+    val method2: (Int, Int, Int) -> String = { num1, num2, num3 ->
+        "num1:$num1,num2:$num2,num3:$num3"
+    }
+    println("method1" + method1(1, 2, 3))
+    println("method2" + method2(1, 2, 3))
+
+    val method3 = { 123 }
+    println(method3())
+}
+```
+
+### 具名函数
+
+指在调用函数的时候指定形参的名称
+
+```
+fun main(args: Array<String>) {
+    //匿名函数
+    showPersonInfo("lisi", 20, '男', "学习kotlin语言") {
+        println("输出结果：$it")
+    }
+    //具名函数
+    // :: 将普通函数转换为lambel表达式属于函数的对象级别的
+    showPersonInfo("庄三", 24, '男', "学习kotlin语言", ::showPersonApl)
+
+}
+
+/**
+ * 如何将一个函数对象转换为一个参数
+ */
+fun showPersonApl(result: String) {
+    println("输出结果：$result")
+}
+
+// 函数的内联
+inline fun showPersonInfo(name: String, age: Int, sex: Char, study: String, showResult: (String) -> Unit) {
+    val str = "name:$name,age:$age,sex：$sex,study:$study"
+    showResult(str)
+}
+```
+
 ### Unit函数
 
-
-
 在kotlin中函数没有返回值的的函数叫unit函数，返回类型为unit，在java中void的没有返回值
+
+在kotlin中也可以不写，默认unit(Unit代表无参数返回的)
 
 ### Nothing类型
 
 TODO函数的任务就是抛出异常，返回Nothing类型
+
+给TODO加上注释就起到标记的作用，可以很快定位到这个位置
 
 ```
 public inline fun TODO(): Nothing = throw NotImplementedError()
 ```
 
 ![反引号中的函数](../media/pictures/KotlinBase.assets/反引号中的函数.png)
+
+```
+fun main(args: Array<String>) {
+    //第一种情况
+        `2021-11-1 测试登录，要求编码人Derry`("李四","123456")
+    // 第二种情况 in和is 是关键字,,当使用的时候，可以在kotlin中使用反引号
+    JavaDemo.`in`()
+    JavaDemo.`is`()
+}
+private fun  `2021-11-1 测试登录，要求编码人Derry`(name:String,pws:String){
+    println("模拟：用户名是$name,密码是：$pws")
+}
+```
 
 ### 函数的参数
 
@@ -1055,6 +1267,22 @@ public inline fun TODO(): Nothing = throw NotImplementedError()
 可变参数：可变参数，是指参数类型确定但个数不确定的参数，可变参数通过vararg关键字标识，我们可以将其理解为数组。可变参数通常声明在形参列表中的最后位置，如果不声明在最后位置，那么可变参数后面的其他参数都需要通过命名参数的形式进行传递。
 
 Kotlin中的可变参数与Java中的可变参数的对比Kotlin中可变参数规则：• 可变参数可以出现在参数列表的任意位置；• 可变参数是通过关键字vararg来修饰；• 可以以数组的形式使用可变参数的形参变量，实参中传递数组时，需要使用“*”前缀操作符。Java中可变参数规则：• 可变参数只能出现在参数列表的最后；• 用“…”代表可变参数，“…”位于变量类型与变量名称之间；• 调用含有可变参数的函数时，编译器为该可变参数隐式创建一个数组，在函数体中以数组的形式访问可变参数。
+
+```
+fun main(args: Array<String>) {
+    // 第一步，函数的声明，第二步：对声明函数的实现
+    val method: (Int, Int, Int) -> String = {
+        num1,num2, num3 ->
+        val num = 123456
+        "$num Derry 数字1：$num1,$num2.$num3 "
+    }
+    // 第三步：调用这个函数
+    println(method(1, 2, 3)
+    )
+}
+```
+
+
 
 ## 继承/构造函数
 
@@ -1183,7 +1411,7 @@ fun main(args: Array<String>) {
 成绩： 129
 ```
 
-## 接口
+## 接口的实现
 
 Java中继承使用的关键字是extends，实现接口使用的关键字是implements，而Kotlin中统一使**用冒号**，中间用逗号进行分隔
 
@@ -1343,6 +1571,31 @@ for (fruit in list2) {
 }
 ```
 
+## 内联函数inline
+
+学习：https://www.jianshu.com/p/ab877fe72b40
+
+### 定义
+
+**定义**：使用linline定义的函数叫内联函数
+
+**意义：**一些方法被频繁的调用，就会一直进栈出栈，这样会造成栈空间或栈内存的大量消耗。因此就使用了linline,表示内联函数
+
+inline 是方法的一个修饰符，用来让方法以内联的方式进行编译。什么是内联，简单说就像是复制了一份方法实现代码进来。即是在编译时期，把调用这个函数的地方用函数的方法体调换，在这个过程中进行代码的移动，即是复制，并不需要进栈出栈，这样大大解放了内存，提高了效率
+
+优点：提交代码的性能，也代码更加的简介
+
+**在编译时期，把调用这个函数的地方用这个函数的方法体替换**
+
+### 使用范围
+
+1. 不带参数，或是带有普通参数的函数，不建议使用 `inline`
+2. 带有 `lambda` 函数参数的函数，建议使用 `inline`
+
+当我们对函数进行内联的时候，对应的参数也会进行内联，当不想参数也进行内联的时候，可以使用noinline修饰符来修饰参数
+
+## 函数的引用
+
 # 空指针检查
 
 Kotlin却非常科学地解决了这个问题，它利用编译时判空检查的机制几乎杜绝了空指针异常。
@@ -1351,19 +1604,24 @@ Kotlin却非常科学地解决了这个问题，它利用编译时判空检查�
 
 ## 判空辅助工具
 
-### ?.操作符
+###  安全调用符 ?.
 
 当对象不为空时正常调用相应的方法，当对象为空时则什么都不做
+
+可空变量在使用时需要通过if…else语句进行判断，然后再进行相应的操作。这样的使用方式还是比较复杂，为此Kotlin提供了一个安全调用符“?.”，专门用于调用可空类型变量中的成员方法或属性，其语法格式为“变量?.成员”
 
 ```
 if(a != null){
     a.eat()
 }
 //使用操作符
-a?.eat()
+a?.eat() //在使用“?.”调用可空变量的属性时，如果当前变量为空，则程序编译也不会报错，而是返回一个null值。
+
 ```
 
-### ?:操作符
+### Elvis操作符  ?:
+
+当值为null的时候，不想让其返回null,需要让其返回一个默认的值
 
 这个操作符的左右两边都接收一个表达式，如果左边表达式的结果不为空就返回左边表达式的结果，否则就返回右边表达式的结果。
 
@@ -1383,6 +1641,10 @@ let既不是操作符，也不是什么关键字，而是一个函数
 
 let函数是可以处理全局变量的判空问题的
 
+#### 定义
+
+一个作用域函数
+
 ```
 fun study(Study study?){
     study?.eat()
@@ -1400,12 +1662,142 @@ fun study(Study study?){
     }
 ```
 
-## 字符串内嵌表达式
+#### 作用
 
-**学习：**
+定义一个变量在特定的作用域范围内，避免写一些判空的操作
 
-**空指针检测，val与var推断，高级函数，匿名函数，函数类型和隐式返回，函数参数的学习，it关键字 ,匿名函数类型推断，lamba**
+
+
+```
+fun main(args: Array<String>) {
+    var name: String? = null
+    name = "在kotlin中使用Let的安全调用"
+    // name为可空类型，当name为null的时候，？后面的不执行
+
+    //方法1：使用it代替object来访问公有属性的方法
+    name.let {
+        it.toString()
+    }
+    //方法2：判断Object为空的操作，
+    var r = name?.let {
+        /**
+         * it ==name 本身
+        如果可以执行到这里面。it一定不为空
+        str.isBlank()表示：str == null || str.length == 0 || str.trim().length == 0
+         */
+
+        if (it.isNullOrBlank()) {
+            "Default"
+        } else {
+            it
+        }
+    }
+    println(r)
+```
+
+```javascript
+// 使用Java
+if( mVar != null ){
+    mVar.function1();
+    mVar.function2();
+    mVar.function3();
+}
+
+// 使用kotlin（无使用let函数）
+mVar?.function1()
+mVar?.function2()
+mVar?.function3()
+
+// 使用kotlin（使用let函数）
+// 方便了统一判空的处理 & 确定了mVar变量的作用域
+mVar?.let {
+       it.function1()
+       it.function2()
+       it.function3()
+}
+```
+
+#### 返回值
+
+- let函数：返回值 = 最后一行 / return的表达式
+
+#### 使用场景
+
+let函数适用的场景
+
+场景一: 最常用的场景就是使用let函数处理需要针对一个可null的对象统一做判空处理。
+
+场景二: 然后就是需要去明确一个变量所处特定的作用域范围内可以使用
+
+### 非断言!！
+
+必须是在确保Object在不为空的情况下，不然还是会报空指针异常
+
+```
+fun main(args: Array<String>) {
+    var name: String? = null
+    // name?.capitalize() // name为可空类型，当name为null的时候，？后面的不执行
+    //补救措施，我们已经学习了？
+    var str = name!!.capitalize() //!!断言，不管name是否为空都执行
+    println(str)
+    // 结论：只有百分比的确认name不为空，才可以使用！！断言。否则会有Java空指针异常
+}
+```
+
+### if判空
+
+```
+fun main(args: Array<String>) {
+    var name: String? = null
+    if (name!=null){
+        var str = name.capitalize()
+        println(str)
+    }else{
+        println("name is null")
+    }
+}
+```
+
+### kotlin中的空合并操作符
+
+```
+fun main(args: Array<String>) {
+    var name :String? = "kotlin中的空合并操作符"
+    //空合并操作符：xx?:"name为空",如果xx为空，则会执行？：后面的语句
+    println(name?:"name为空")
+    //let函数+空合并操作符
+    println(name?.let { "[$it]" }?:"name为空2")
+}
+```
+
+
+
+
 
 # 泛型
 
 Any是Kotlin中所有类的共同基类，相当于Java中的Object，而Any？则表示允许传入空值。
+
+# 异常
+
+当我们需要检测代码的时候，可以利用kotlin语言的先决条件，内部抛出异常来检测
+
+```
+fun main(args: Array<String>) {
+    var name: String? = null
+    var name2: Boolean = true
+
+    //checkNotNull(name)  Exception in thread "main" java.lang.IllegalStateException: Required value was null.
+    //requireNotNull(name) //Exception in thread "main" java.lang.IllegalArgumentException: Required value was null.
+    require(name2)
+}
+```
+
+# Kotlin开发中的一些Tips
+
+学习地址：https://juejin.cn/post/7012979587248291877
+
+### Kotlin中 ?、!!、?:、:: 、->、== 符号的简单说明
+
+
+
