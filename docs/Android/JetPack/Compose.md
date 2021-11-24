@@ -1,1 +1,0 @@
-![image-20211014200601098](../media/pictures/Compose.assets/image-20211014200601098.png)

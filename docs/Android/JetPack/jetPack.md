@@ -4,11 +4,8 @@ Android 复习资料汇总
 https://github.com/733gh/GH-Android-Review-master
 高级面试
 https://github.com/733gh/Android-Notes
-Jetpack架构组件简析与AndroidX
 
 
-Android Jetpack架构组件(三)之ViewModel
-https://zhuanlan.zhihu.com/p/334996058
 Android Jetpack架构组件(四)之LiveData
 https://zhuanlan.zhihu.com/p/336566452
 Android Jetpack架构组件(五)之Navigation
@@ -29,7 +26,7 @@ Android Jetpack架构组件(十一)之
 Android Jetpack架构组件(十二)之Hilt
 https://segmentfault.com/a/1190000039039120?utm_source=tag-newest
 
-## Jetpack架构组件简析与AndroidX
+# Jetpack架构组件简析与AndroidX
 
 参考学习1：https://segmentfault.com/a/1190000037626996
 
@@ -53,7 +50,7 @@ databinding进行数据的绑定，单向或者双向。viewmodel进行数据管
 
 **Data Binding**：不用说，都知道，加速`MVVM`的创建。
 
-**Lifecycle**：虽然我没有写文章介绍，但是不代表它的作用不够强大，他是我们能够处理`Activity`和`Fragment`的生命周期的重要原因，在`AndroidX`的`Fragment`和`Activity`已经对`Lifecycle`提供了默认支持。
+**Lifecycle**：处理`Activity`和`Fragment`的生命周期的重要原因，在`AndroidX`的`Fragment`和`Activity`已经对`Lifecycle`提供了默认支持。
 
 **ViewModel**：当做`MVVM`的`ViewModel层`，并具有声明周期意识的处理和UI相关的数据。
 
@@ -66,17 +63,17 @@ databinding进行数据的绑定，单向或者双向。viewmodel进行数据管
 **WorkManager**：灵活、简单、延迟和保证执行的后台任务处理库。
 链接：https://juejin.cn/post/6844903889574051848
 
-## Android Jetpack架构组件(一)与AndroidX
+# Android Jetpack架构组件(一)与AndroidX
 
 参考学习：https://zhuanlan.zhihu.com/p/269437734
 
-## Android Jetpack架构组件(二)之Lifecycle
+# Android Jetpack架构组件(二)之Lifecycle
 
 参考学习：https://www.jianshu.com/p/32f1d226107f
 
 参考学习：https://www.jianshu.com/p/09d6b3d8c3de
 
-### 背景
+## 背景
 
 Lifecycle用来管理Activity和fragment的生命周期
 
@@ -86,7 +83,7 @@ Lifecycle用来管理Activity和fragment的生命周期
 
 为此，Google提供了LifeCycle作为解决方案。LifeCycle可以帮助开发者创建可感知生命周期的组件。这样，组件便能够在其内部管理自己的生命周期，从而降低模块间的耦合度，并降低内存泄漏发生的可能性
 
-### 使用
+## 使用
 
 导入依赖：
 
@@ -182,3 +179,20 @@ public class LifecycleService extends Service implements LifecycleOwner {
 
 使用和其他的一样，添加依赖，让其实现，让该类实现LifecycleObserver接口，以负责对应用程序生命周期的监听。
 
+# Android Jetpack架构组件(三)之ViewModel
+
+学习链接：https://zhuanlan.zhihu.com/p/334996058
+
+## 简介
+
+视图与数据模型直接的桥梁（即将view与model层进行绑定，当model层发生改变的时候，通知View进行刷新），viewModel用于专门放置应用程序所需的数据，将视图与页面进行了分离
+
+在JetPack架构中，ViewModel组件是一个可以感知生命周期的形式来存储和管理视图相关的数据的组件，因此它适合以下场景。 - 适合需要保存大量数据的场景。例如，对于需要保存小量数据的场景，我们可以使用Activity/ Fragment的onSaveInstanceState方法保存数据，然后在onCreate方法中利用onRestoreInstanceState进行还原。但是，onSaveInstanceState只适合用来存储数据量少且序列化或者反序列化不复杂的数据，如果被序列化的对象复杂的话，序列化会消耗大量的内存，进而造成丢帧和视觉卡顿等问题。而ViewModel不仅支持数据量大的情况，还不需要序列化、反序列化操作。 - 在Android中，Activity/Fragment主要用于显示视图数据，如果它们也负责数据库或者网络加载数据等操作，那么势必造成代码臃肿，而将逻辑代码放到ViewModel之后，可以更有效的将视图数据相关逻辑和视图控制器分离开来。
+
+## 生命周期
+
+因为ViewModel是保存在内存中，因此，viewModel的生命周期并不会受Activity和fragment影响，下面是官方给出的生命周期图
+
+![viewmodel_生命周期](../media/pictures/jetPack.assets/viewmodel_生命周期.jpg)
+
+从上图可以看出，ViewModel会伴随着Activity/Fragment的整个生命周期，直到ViewModel绑定的Activity/Fragment执行onDestroy()方法之后才会被销毁。

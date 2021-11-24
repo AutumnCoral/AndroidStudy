@@ -131,7 +131,7 @@ const val NUM_A = 6
 
 
 >Java有两种数据类型:引用类型与基本数据类型。
->Kotlin只提供引用类型这一种数据类型，出于更高性能的需要，Kotlin编译器会在Java字节码中改用基本数据类型。
+>      Kotlin只提供引用类型这一种数据类型，出于更高性能的需要，Kotlin编译器会在Java字节码中改用基本数据类型。
 >
 >
 
@@ -173,6 +173,23 @@ const val NUM_A = 6
 
 - 在java中**== 比**较的是变量(栈)内存中存放的对象的(堆)内存地址，用来判断两个对象的地址是否相同，即是否是指相同一个对象。比较的是真正意义上的指针操作。**equals**用来比较的是两个对象的内容是否相等，由于所有的类都是继承自java.lang.Object类的，所以适用于所有对象，如果没有对该方法进行覆盖的话，调用的仍然是Object类中的方法，而Object中的equals方法返回的却是==的判断。
 
+- ```
+  fun main(args: Array<String>) {
+      val a: String = "Aa"
+      val b: String = "BB"
+      val c: String = "BB"
+      val e:String="aa".capitalize()// 将首字母转换为大写
+      println(a.equals(c))// java中的equals
+      println(a == c) //输出结果：false
+      println(a === c) // 输出结果：false
+      println(b == c) //输出结果：true ,内容比较
+      println(b === c)//输出结果：true ,引用比较
+      println(a == e)//输出结果：true ,内容比较
+      println(a === e)//输出结果：false ,引用比较，当转换对的时候重新开辟了一个内存单元
+  
+  }
+  ```
+
 #### 类型转换
 
 由于不同的表示方式，较小类型并不是较大类型的子类型，较小的类型不能隐式转换为较大的类型。 这意味着在不进行显式转换的情况下我们不能把 Byte 型值赋给一个 Int 变量。
@@ -187,6 +204,44 @@ toLong(): Long
 toFloat(): Float
 toDouble(): Double
 toChar(): Char
+```
+
+以后字符串··有关整形的转换，尽量使用此toIntOrNull函数
+
+```
+fun main(args: Array<String>) {
+    val number: Int = "123".toInt()
+    println(number)
+    //解决什么奔溃的问题
+    val number2: Int? = "123".toIntOrNull()
+    val number3: Int? = "123.9".toIntOrNull()
+    println(number2)
+    //Elvis操作符（?:）,当值为空的时候，我们不想输出null,这是我们可以利用？：来自定义我们需要输出的内容，当为null的时候输出？：后面的内容，当不为空的时候不输出
+    println(number3?:"num3为空")
+
+}
+```
+
+##### Double转Int
+
+**用roundToInt函数，DOuble->Int有四舍五入的效果**
+
+```
+fun main(args: Array<String>) {
+    println(65.65.toInt()) //输出65，四舍五入
+    println(65.65.roundToInt())//66,四舍五入
+    // 用roundToIn函数，DOuble->Int有四舍五入的效果
+}
+```
+
+#### 保留小数后几位的问题
+
+利用**%.nf.format**来保留，保留的小数
+
+```
+// 保留小数点
+val data  ="%.3f".format(43.31456)
+println(data) //43.315
 ```
 
 ###  类型推断
@@ -669,7 +724,7 @@ val  str:String = "Hello Word"
 
 - String 可以通过 trimMargin() 方法来删除多余的空白。
 
-###  字符串模板
+###  字符串模板 $
 
 - $ 表示一个变量名或者变量值
 - $varName 表示变量值
@@ -765,21 +820,7 @@ println("v1:$v1,v2:$v2,v3:$v3,v4:$v4") //输出：v1:AA,v2:SS,v3:DD,v4:FF
 
 在kotlin中 replace的作用和在java中的基本一样，可以参考java中的学习
 
-## 注释
-
-kotlin中的注释几乎和java中的没啥区别，唯一区别就是在kotlin的多行注释可以嵌套多行注释，这在java中是不可以的
-
-```
-/**
- * 第一个多行注释
- *
- * /**
- * 第二个多行注释
- * */
- */
-```
-
-## 字符串判空
+### 字符串判空
 
 在kotlin中提供了很多的实现不同功能的判空的方法
 
@@ -815,6 +856,31 @@ fun main(args: Array<String>) {
     println(str?.isNotBlank())  // 输出：true，isBlank的反结果 等价于str ！= null || str.length ！= 0
     println(str.isNullOrBlank())  // 输出false
 }
+```
+
+### 字符串的遍历forEach
+
+```
+fun main(args: Array<String>) {
+    val str = "ABCDEFGHLGKLMNOPKR"
+    str.forEach {
+        println("字符串遍历结果为：$it")
+    }
+}
+```
+
+## 注释
+
+kotlin中的注释几乎和java中的没啥区别，唯一区别就是在kotlin的多行注释可以嵌套多行注释，这在java中是不可以的
+
+```
+/**
+ * 第一个多行注释
+ *
+ * /**
+ * 第二个多行注释
+ * */
+ */
 ```
 
 # 条件控制结构
@@ -1594,6 +1660,140 @@ inline 是方法的一个修饰符，用来让方法以内联的方式进行编�
 
 当我们对函数进行内联的时候，对应的参数也会进行内联，当不想参数也进行内联的时候，可以使用noinline修饰符来修饰参数
 
+## 内置函数
+
+### 内置函数的总结：
+
+- **info.let
+  1. let函数的返回类型，是根据匿名函数的最后一行的变化而变化的 ------**和run一模一样**
+  2. let函数的 匿名函数里面持有的it== 集合本身
+- info.apply
+  1. apply函数返回类型永远一直为info
+  2. apply函数的 匿名函数里面持有的this== info本身，并没有it ------ **和run一摸一样**
+- info.run
+  1. run函数的返回类型。是根据匿名函数的最后一行的变化而变化的。**----此条和let一模一样**
+  2. run函数的 匿名函数里面持有的this== info本身，-----和apply一模一样
+- with(info) 
+  1. with和run基本相同，只不过是使用的时候不同
+  2. with函数的返回类型。是根据匿名函数的最后一行的变化而变化的。**----此条和let一模一样**
+  3. with函数的 匿名函数里面持有的this== info本身，-----和apply一模一样
+
+### apply
+
+就是简化初始化对象的功能，在apply函数中，代表对象本身的是this，而不是匿名函数的it
+
+```
+fun main(args: Array<String>) {
+    val info = "Kotlin中的apply内置函数"
+    // 普通方式
+    println(" info的字符串的长度：${info.length}")
+    println(" info的最后一个字符是：${info[info.length - 1]}")
+
+    /*
+     *  apply的内置函数的方式
+     *  info.apply的特点:apply始终返回"info本身String类型"
+     */
+    val newInfo = info.apply {
+        //一般情况下，匿名函数都会有it,it等价于Object本身，但是apply没有it，但是会只有this== info本身
+        println("apply匿名函数里面打印的：$this")
+        println("apply的字符串的长度：${length}")
+        println("apply的最后一个字符是：${this[length - 1]}")
+    }
+    println(newInfo)
+    /*
+      真正使用apply
+       info.apply的特点:info.apply的特点:apply始终返回"info本身String类型"
+       始终返回函数的本身，不会根据匿名函数的变化而变化
+      */
+    info.apply {
+        println("apply真正用法匿名函数里面打印的：$this")
+    }.apply {
+        println("apply真正用法的字符串的长度：${length}")
+    }.apply {
+        println("apply真正用法的最后一个字符是：${this[length - 1]}")
+    }
+    //普通写法
+    val file = File("H:\\a.doc")
+    file.setExecutable(true)
+    file.setReadable(true)
+    println(file.readLines())
+    // apply的写法，this代表file本身
+    file.apply {
+        setExecutable(true)
+    }.apply {
+        setReadable(true)
+    }.apply {
+        println(readLines())
+    }
+}
+```
+
+### let
+
+空指针检测--判空工具-**查看1.3let**
+
+### run
+
+- run函数的特点：字符串延时
+  2.具名函数判断长度 isLong
+  3,具名函数检测合格 showText
+  4,具名函数增加一个括号 mapText
+  5,具名函数输出内容
+
+```
+@description ：kotlin语言的内置函数run
+
+ */
+fun main(args: Array<String>) {
+    val str = "kotlin语言的内置函数run"
+    val data: Float = str.run {
+        // this== str的本身
+        // run函数的返回类型。是根据匿名函数的最后一行的变化而变化的
+        23.4f
+    }
+    println(data)
+    // 下m面试具名函数配合run函数
+    // 具名函数判断长度isLong
+    // 这个是匿名函数配合run使用
+    str.run {
+        // this ==str本身
+    }
+    // str的类型由最后一行的值决定，这个是属于具名函数
+    // :: 符号的作用：将一个方法当做一个参数，传递给另一个方法使用，就是引用一个方法
+    // ----------------------------------上面全是具名调用run来执行，下面全是匿名调用给run执行
+    /* val str2: String = str
+             .run(::isLong)
+             .run(::showText)
+             .run(::mapText)
+     println(str2)*/
+    str
+            .run(::isLong) // this == str本身
+            .run(::showText) // this == isLong返回的Boolean
+            .run(::mapText) //this == showText返回的字符串
+            .run(::println)// 打印 this == mapText返回的字符串
+
+    //let是持有it，run函数有this，都可以很灵活的把上一个结果结果值给下一个函数
+    str.let(::isLong) // it == str本身
+            .let(::showText) // it == == isLong返回的Boolean
+            .let(::mapText) //it == == showText返回的字符串
+            .let(::println)// 打印 it == == mapText返回的字符串
+    // ----------------------------------上面全是具名调用run来执行，下面全是匿名调用给run执行
+    str.run {
+        if (length > 5) true else false
+    }.run {
+        if (this) "你的字符串是合格的" else "你的字符串是不合格的"
+    }.run {
+        "{$this}"
+    }.run {
+        println(this)
+    }
+}
+
+fun isLong(data: String) = if (data.length > 5) true else false
+fun showText(isLong: Boolean) = if (isLong) "你的字符串是合格的" else "你的字符串是不合格的"
+fun mapText(getShow: String) = "{$getShow}"
+```
+
 ## 函数的引用
 
 # 空指针检查
@@ -1640,6 +1840,8 @@ val c = if (a != null){
 let既不是操作符，也不是什么关键字，而是一个函数
 
 let函数是可以处理全局变量的判空问题的
+
+**let扩展函数的实际上是一个作用域函数，当你需要去定义一个变量在一个特定的作用域范围内，let函数的是一个不错的选择；let函数另一个作用就是可以避免写一些判断null的操作。**
 
 #### 定义
 
@@ -1728,6 +1930,77 @@ let函数适用的场景
 场景一: 最常用的场景就是使用let函数处理需要针对一个可null的对象统一做判空处理。
 
 场景二: 然后就是需要去明确一个变量所处特定的作用域范围内可以使用
+
+```
+@description ：kotlin的内置函数let
+普通方式：对集合的第一个元素相加
+let方式：对集合第一个元素相加
+普方式：对值判断null,并返回
+let方式：对值判断null，并且返回
+
+内置函数的总结：
+let:
+1,let函数的返回类型，是根据匿名函数的最后一行的变化而变化的
+2，let函数的 匿名函数里面持有的it== 集合本身
+apply
+1,apply函数返回类型永远一直为info,
+2，apply函数的 匿名函数里面持有的this== info本身，并没有it
+ */
+fun main(args: Array<String>) {
+
+    // 对集合的第一个元素相加
+    /*
+    普通方式：对集合的第一个元素相加
+     */
+    val list = listOf(1, 2, 3, 4, 5, 6)
+    val firstData = list.first()
+    val result = firstData + firstData
+    println(result)
+    /*
+      let方式：对集合第一个元素相加
+      let匿名函数，是根据匿名函数的最后一行的变化而变化的
+      let函数对的匿名函数里面持有的是it,apply是this，
+     */
+    val result2 = listOf(1, 2, 3, 4, 5, 6).let {
+        // it == list集合（即是，谁调用就是谁
+        it.first() + it.first()// 匿名函数的最后一行作为返回值。let的特点，但是apply永远返回info本身
+    }
+    println(result2)
+    getNullMethod1(null)
+}
+
+// 对值判断null,并返回
+/*
+ * 普通方式：对值判断null,并返回
+ * 注意：在kotlin中if是条件表达式，也是可以有返回值的，每一个条件中的最后一行代码的返回值
+ * 在java中是语句
+ */
+// 不简化
+fun getNullMethod1(data: String?): String {
+    return if (data == null) "dat的值为空" else "${data}的值不为空"
+}
+
+// 简化版1
+fun getNullMethod2(data: String?): String = if (data == null) "dat的值为空" else "${data}的值不为空"
+
+// 简化版3,类型会自动推断
+fun getNullMethod3(data: String?) = if (data == null) "data的值为空" else "${data}的值不为空"
+
+/*
+let 对值判断null,并返回
+?:不想让其返回值null,需要让其返回一个自定义的语句
+ */
+fun getNullMethod4(data: String?): String {
+    return data?.let {
+        "${data}的值不为空"
+    } ?: "data的值为空"
+}
+
+// let的简化版本
+fun getNullMethod5(data: String?) = data?.let {
+    "${data}的值不为空"
+} ?: "data的值为空"
+```
 
 ### 非断言!！
 
