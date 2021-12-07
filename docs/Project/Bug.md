@@ -68,3 +68,13 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
     }
 }
 ```
+
+
+
+## ERROR: MobSDK已停止支持非严格模式版本，请按上面编译告示接入合规版本！
+
+ 在/gradle.properties文件中加
+
+```
+MobSDK.spEdition=FP
+```
